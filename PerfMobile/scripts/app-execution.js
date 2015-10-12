@@ -16,7 +16,7 @@ function signInButton(e) {
                 document.getElementById("test-results").innerHTML = outputCSV;
                 console.log("something");
                 console.log(xhttp.getAllResponseHeaders());
-                console.log("something else");
+                console.log("something else more");
                 // var headers = xhttp.getAllResponseHeaders();
                 // alert(headers);
                 //alert(apiName + ' Duration: ' + timeDiff.toString());
