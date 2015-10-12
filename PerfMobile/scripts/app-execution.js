@@ -59,7 +59,7 @@ function runBrowseRequest(outputCSV) {
 	            }
 	        }
 	        // xhttp.open("POST", "https://plli03.qad.com:40011/qad-central/j_spring_security_check?j_username=mfg@qad.com&j_password=", true);
-	    xhttp.open("GET", baseURL + "/api/qracore/browses?browseId=mfg:so803&page=1&pageSize=10", true);
+	    xhttp.open("GET", baseURL + "/api/qracore/browses?browseId=mfg:so803&page=1&pageSize=100", true);
 	    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    xhttp.setRequestHeader("Accept-Language", "en-US,en;q=0.8");
 	    xhttp.setRequestHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
