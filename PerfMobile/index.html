@@ -15,7 +15,7 @@
 </head>
 <body>
  
-    <div data-role="layout" data-id="main">
+    <!-- <div data-role="layout" data-id="main"> -->
         <div data-role="header">
             <div data-role="navbar">
                 <span data-role="view-title"></span>
@@ -23,7 +23,31 @@
         </div>
 
         <!-- application views will be rendered here -->
-        
+              <div data-role="view" id="login" data-title="Login" data-model="loginView">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+            </div>
+            <form>
+                <ul data-role="listview" data-style="inset">
+                    <li>
+                       <label>
+                        Username:
+                           <input type="text" name="username" data-bind="value: username">
+                        </label>
+                    </li>
+                    <li>
+                       <label>
+                        Password:
+                           <input type="password" name="password" data-bind="value: password">
+                       </label>
+                    </li>
+                    <li>
+                       <button style="width: 100%" data-role="button" data-bind="click: submit">Login</button>
+                    </li>
+                </ul>
+            </form>
+
+        </div>
         <div data-role="footer">
             <div data-role="tabstrip">
                 <a href="views/home.html" data-icon="home">Home</a>   
@@ -31,7 +55,7 @@
                 <a href="views/contacts.html" data-icon="contacts">Contacts</a>
             </div>
         </div>
-    </div>
+   <!-- </div> -->
 
 </body>
 </html>

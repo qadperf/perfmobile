@@ -43,10 +43,38 @@
         skin: 'flat',
 
         // the application needs to know which view to load first
-        initial: 'views/home.html'
+        // initial: 'views/home.html'
       });
 
     }, false);
+   window.loginView = kendo.observable({
+        submit: function () {
+            if (!this.username) {
+                navigator.notification.alert("Username is required.");
+                return;
+            }
+            /*
+            if (!this.password) {
+                navigator.notification.alert("Password is required.");
+                return;
+            } */
+            console.log(this.username);
+        }
+    });
+
+    window.listView = kendo.observable({
+        logout: function (event) {
+            // Prevent going to the login page until the login call processes.
+            event.preventDefault();
+            el.Users.logout(function () {
+                this.loginView.set("username", "");
+                this.loginView.set("password", "");
+                window.location.href = "#login";
+            }, function () {
+                navigator.notification.alert("Unfortunately an error occurred logging out of your account.");
+            });
+        }
+    });
 
 
 }());
