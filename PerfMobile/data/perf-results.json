@@ -8,7 +8,7 @@
         "duration": 1154,
         "records": 5,
         "size": 1024
-    },    
+    },
     {
         "ping": "321",
         "location": "Limerick,Ireland",
@@ -58,7 +58,7 @@
         "duration": 7154,
         "records": 5,
         "size": 1024
-    },    
+    },
     {
         "ping": "181",
         "location": "Limerick,Ireland",
@@ -75,7 +75,17 @@
         "server": "PLLI03",
         "datetime": "11 Oct 2015 19:55:37",
         "api": "Login",
-        "duration": 2114,
+        "duration": 1814,
+        "records": 5,
+        "size": 1024
+    },
+    {
+        "ping": "176",
+        "location": "Limerick,Ireland",
+        "server": "PLLI03",
+        "datetime": "11 Oct 2015 19:55:37",
+        "api": "Login",
+        "duration": 1244,
         "records": 5,
         "size": 1024
     },
