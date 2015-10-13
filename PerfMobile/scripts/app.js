@@ -68,7 +68,6 @@
 					var outputCSV = "";
 					var requestType = "POST";
 					var recordSize = "100";
-					var requestType;
 					var requestURL;
 					var browseId;
 
@@ -171,7 +170,7 @@
 		var xhttp = new XMLHttpRequest();
 											j.innerHTML += "RUNNING: " + api_url;
 							xhttp.onreadystatechange = function () {
-									if (xhttp.readyState == 4) {
+									if (xhttp.readyState === 4) {
 										var endTime = +new Date();
 										var timeDiff = endTime - currentTime;
 										outputCSV = "API,ResponseTime(ms) <br>" + apiName + "," + timeDiff.toString();
