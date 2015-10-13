@@ -18,13 +18,16 @@
                 ds: new kendo.data.DataSource({
                     data: [{
                         id: 1,
-                        name: 'Bob'
+                        name: "Murali Ayyagari"
                     }, {
                         id: 2,
-                        name: 'Mary'
+                        name: "Eddie O'Sullivan"
                     }, {
                         id: 3,
-                        name: 'John'
+                        name: "David Hughes"
+                    }, {
+                        id: 4,
+                        name: "Ray Kearney"
                     }]
                 }),
                 alert: function (e) {
