@@ -13,6 +13,9 @@
             settings: {
                 title: 'Settings'
             },
+            results: {
+                title: 'Results'
+            },
             contacts: {
                 title: 'Contacts',
                 ds: new kendo.data.DataSource({

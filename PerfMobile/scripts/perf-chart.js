@@ -57,9 +57,6 @@
                 legend: {
                     position: "bottom"
                 },
-                tooltip: {
-                    visible: true
-                },
                 seriesDefaults: {
                     type: "line",
                     style: "normal"
