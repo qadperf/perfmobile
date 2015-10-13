@@ -1,7 +1,119 @@
 <!DOCTYPE html>
-<div id="perf-chart" data-role="view" data-title="Results" data-layout="main" data-model="APP.models.results" 
-     data-show="app.perfChart.createPerfChart('Login')" 
-     data-hide="app.perfChart.unbindResizeEvent" 
-     data-stretch="true">
-    <h1 data-bind="html: title"></h1>
+<div data-role="view" data-title="Results" data-layout="main" data-model="APP.models.results">
+    <div id="login-chart">
+    </div>    
+        <script>
+            $("#login-chart").kendoChart({
+                theme: "Material",
+                renderAs: "svg",
+                dataSource: {
+                    transport: {
+                        read: {
+                            url: "data/perf-results.json",
+                            dataType: "json"
+                        }
+                    },
+                    sort: {
+                        field: "datetime",
+                        dir: "asc"
+                    },
+                    filter: {
+                        "field": "api",
+                        "operator": "eq",
+                        "value": "Login"
+                    }
+                },
+                valueAxis: {
+                    min: 0,
+                    title: {
+                        text: "Milliseconds"
+                    }
+                },
+                chartArea: {
+                    width: $(window).width(),
+                    height: $(window).height()
+                },
+                title: {
+                    position: "top",
+                    text: "Login"
+                },
+                legend: {
+                    position: "bottom"
+                },
+                seriesDefaults: {
+                    type: "line",
+                    style: "normal"
+                },
+                series: [
+                    {
+                        field: "duration",
+                        name: "Duration"
+
+                    },
+                    {
+                        field: "ping",
+                        name: "Ping"
+                    }
+                ],
+                transitions: true
+            });
+        </script>
+<div id="create-chart">
+    </div>    
+        <script>
+            $("#create-chart").kendoChart({
+                theme: "Material",
+                renderAs: "svg",
+                dataSource: {
+                    transport: {
+                        read: {
+                            url: "data/perf-results.json",
+                            dataType: "json"
+                        }
+                    },
+                    sort: {
+                        field: "datetime",
+                        dir: "asc"
+                    },
+                    filter: {
+                        "field": "api",
+                        "operator": "eq",
+                        "value": "Create"
+                    }
+                },
+                valueAxis: {
+                    min: 0,
+                    title: {
+                        text: "Milliseconds"
+                    }
+                },
+                chartArea: {
+                    width: $(window).width(),
+                    height: $(window).height()
+                },
+                title: {
+                    position: "top",
+                    text: "Create"
+                },
+                legend: {
+                    position: "bottom"
+                },
+                seriesDefaults: {
+                    type: "line",
+                    style: "normal"
+                },
+                series: [
+                    {
+                        field: "duration",
+                        name: "Duration"
+
+                    },
+                    {
+                        field: "ping",
+                        name: "Ping"
+                    }
+                ],
+                transitions: true
+            });
+        </script>    
 </div>

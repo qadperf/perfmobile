@@ -26,7 +26,7 @@
                 dataSource: {
                     transport: {
                         read: {
-                            url: jsonUrlToLoad,
+                            url: "data/perf-results.json",
                             dataType: "json"
                         }
                     },
@@ -48,7 +48,7 @@
                 },
                 chartArea: {
                     width: $(window).width(),
-                    margin: app.emToPx(1)
+                    height: $(window).height()
                 },
                 title: {
                     position: "top",
@@ -87,9 +87,5 @@
             $(window).off("resize.perfChart");
         }
     };
-    
-    app.emToPx = function (input) {
-        var emSize = parseFloat($("body").css("font-size"));
-        return (emSize * input);
-    };
+
 })(window, jQuery);

@@ -15,6 +15,7 @@
             },
             results: {
                 title: 'Results'
+                
             },
             contacts: {
                 title: 'Contacts',
@@ -198,5 +199,10 @@
 											var currentTime = +new Date();
 					xhttp.send();
 	}
+        
+    app.emToPx = function (input) {
+        var emSize = parseFloat($("body").css("font-size"));
+        return (emSize * input);
+    };
 
 }());

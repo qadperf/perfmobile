@@ -1,25 +1,75 @@
 [
     {
-        "ping": "171",
+        "ping": "201",
         "location": "Limerick,Ireland",
         "server": "PLLI03",
-        "datetime": "11 Oct 2015 17:55:37",
+        "datetime": "11 Oct 2015 17:52:37",
         "api": "Login",
-        "duration": 2054,
+        "duration": 1154,
+        "records": 5,
+        "size": 1024
+    },    
+    {
+        "ping": "321",
+        "location": "Limerick,Ireland",
+        "server": "PLLI03",
+        "datetime": "11 Oct 2015 21:55:37",
+        "api": "Login",
+        "duration": 1241,
         "records": 5,
         "size": 1024
     },
-        {
+    {
         "ping": "181",
         "location": "Limerick,Ireland",
         "server": "PLLI03",
         "datetime": "11 Oct 2015 18:55:37",
         "api": "Create",
-        "duration": 2154,
+        "duration": 4154,
         "records": 5,
         "size": 1024
     },
-        {
+    {
+        "ping": "111",
+        "location": "Limerick,Ireland",
+        "server": "PLLI03",
+        "datetime": "11 Oct 2015 22:55:37",
+        "api": "Create",
+        "duration": 6754,
+        "records": 5,
+        "size": 1024
+    },
+    {
+        "ping": "128",
+        "location": "Limerick,Ireland",
+        "server": "PLLI03",
+        "datetime": "11 Oct 2015 18:21:37",
+        "api": "Create",
+        "duration": 4874,
+        "records": 5,
+        "size": 1024
+    },
+    {
+        "ping": "81",
+        "location": "Limerick,Ireland",
+        "server": "PLLI03",
+        "datetime": "12 Oct 2015 18:59:37",
+        "api": "Create",
+        "duration": 7154,
+        "records": 5,
+        "size": 1024
+    },    
+    {
+        "ping": "181",
+        "location": "Limerick,Ireland",
+        "server": "PLLI03",
+        "datetime": "11 Oct 2015 19:55:37",
+        "api": "Create",
+        "duration": 5154,
+        "records": 5,
+        "size": 1024
+    },
+    {
         "ping": "199",
         "location": "Limerick,Ireland",
         "server": "PLLI03",
@@ -29,13 +79,13 @@
         "records": 5,
         "size": 1024
     },
-        {
+    {
         "ping": "188",
         "location": "Limerick,Ireland",
         "server": "PLLI03",
         "datetime": "11 Oct 2015 20:55:37",
         "api": "Login",
-        "duration": 2500,
+        "duration": 1700,
         "records": 5,
         "size": 1024
     }
