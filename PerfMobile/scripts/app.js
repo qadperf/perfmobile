@@ -16,7 +16,7 @@
             },
             results: {
                 title: 'Results'
-                
+
             },
             contacts: {
                 title: 'Contacts',
