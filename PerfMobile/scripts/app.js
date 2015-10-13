@@ -78,7 +78,6 @@
 
 					// Set up the JSON Header Information
 					generateJSONResultHeader();
-
 					// Login API
 					requestURL = baseURL + "/j_spring_security_check?j_username=" + username + "&j_password=" + password;
 					requestType = "POST";
@@ -170,30 +169,23 @@
     function sendAPIRequest(api_url,reqType, apiName, records){
 		var outputCSV;
 		var j = document.getElementById("test-results");
+		j.innerHTML += "RUNNING: " + api_url;
 		var xhttp = new XMLHttpRequest();
-											j.innerHTML += "RUNNING: " + api_url;
-							xhttp.onreadystatechange = function () {
+									xhttp.onreadystatechange = function () {
 									if (xhttp.readyState === 4) {
 										var endTime = +new Date();
 										var timeDiff = endTime - currentTime;
 										outputCSV = "API,ResponseTime(ms) <br>" + apiName + "," + timeDiff.toString();
 										document.getElementById("test-results").innerHTML = outputCSV;
-										// console.log("AllResponseHeaders");
-										// console.log(xhttp.getAllResponseHeaders());
-										// console.log("Response Time");
-										// console.log(" -> " + outputCSV);
-
 										console.log('"test-results": {');
 										console.log('"api" : "' + apiName + '",');
 										console.log('"duration": ' + timeDiff + ',' );
 										console.log('"records" :' + records + ',');
 										console.log('"size" : 0,');
 										console.log('}');
-										// runBrowseRequest(outputCSV);
-										//alert(apiName + ' Duration: ' + timeDiff.toString());
 									}
 						}
-							xhttp.open(reqType, api_url, false);
+							xhttp.open(reqType, api_url, true);
 											xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 											xhttp.setRequestHeader("Accept-Language", "en-US,en;q=0.8");
 											xhttp.setRequestHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
