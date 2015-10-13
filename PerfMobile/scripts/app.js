@@ -74,10 +74,13 @@
 
 					// This section needs to be replaced by reading the APIs to run from a JSON file
 
+					// Set up the JSON Header Information
+					generateJSONResultHeader();
+
 					// Login API
 					requestURL = baseURL + "/j_spring_security_check?j_username=" + username + "&j_password=" + password;
 					requestType = "POST";
-					sendAPIRequest(requestURL, requestType, apiName);
+					sendAPIRequest(requestURL, requestType, apiName, recordSize);
 
 					// Sales 100 Records
 					browseId = "mfg:so803";
@@ -85,7 +88,7 @@
 					requestURL = baseURL + "/api/qracore/browses?browseId=" + browseId + "&page=1&pageSize=" + recordSize;
 					apiName = "SalesOrder-100";
 					requestType = "GET";
-					sendAPIRequest(requestURL, requestType, apiName);
+					sendAPIRequest(requestURL, requestType, apiName, recordSize);
 
 					// Sales 10 Records
 					browseId = "mfg:so803";
@@ -93,7 +96,7 @@
 					requestURL = baseURL + "/api/qracore/browses?browseId=" + browseId + "&page=1&pageSize=" + recordSize;
 					apiName = "SalesOrder-10";
 					requestType = "GET";
-					sendAPIRequest(requestURL, requestType, apiName);
+					sendAPIRequest(requestURL, requestType, apiName, recordSize);
 
 					// Item Browse 10 Records
 					browseId = "mfg:gp340";
@@ -101,7 +104,7 @@
 					requestURL = baseURL + "/api/qracore/browses?browseId=" + browseId + "&page=1&pageSize=" + recordSize;
 					apiName = "ItemName-10";
 					requestType = "GET";
-					sendAPIRequest(requestURL, requestType, apiName);
+					sendAPIRequest(requestURL, requestType, apiName, recordSize);
 
 					// Item Browse 100 Records
 					browseId = "mfg:gp340";
@@ -109,13 +112,16 @@
 					requestURL = baseURL + "/api/qracore/browses?browseId=" + browseId + "&page=1&pageSize=" + recordSize;
 					apiName = "ItemName-10";
 					requestType = "GET";
-					sendAPIRequest(requestURL, requestType, apiName);
+					sendAPIRequest(requestURL, requestType, apiName, recordSize);
 
 					// Item Count Browse
 					requestURL = baseURL + "/api/qracore/browses/totalCount/?browseId=" + browseId;
 					apiName = "ItemName-Count";
 					requestType = "GET";
-					sendAPIRequest(requestURL, requestType, apiName);
+					sendAPIRequest(requestURL, requestType, apiName, recordSize);
+
+					// Close the JSON
+					generateJSONResultFooter();
 				}
             }
         }
@@ -143,19 +149,44 @@
 
     }, false);
 
-    function sendAPIRequest(api_url,reqType, apiName){
-		var xhttp = new XMLHttpRequest();
+    function generateJSONResultHeader(){
+		console.log('[');
+		console.log('{');
+		console.log('"test-info": {');
+		console.log(' "ping": "171",');
+		console.log('"location": "Limerick,Ireland",');
+		console.log('"server": "PLLI03",');
+		console.log(' "datetime": "11 Oct 2015 17:55:37"');
+		console.log('},');
+	}
+
+	function generateJSONResultFooter(){
+		console.log('}');
+		console.log(']');
+	}
+
+    function sendAPIRequest(api_url,reqType, apiName, records){
 		var outputCSV;
+		var j = document.getElementById("test-results");
+		var xhttp = new XMLHttpRequest();
+											j.innerHTML += "RUNNING: " + api_url;
 							xhttp.onreadystatechange = function () {
 									if (xhttp.readyState == 4) {
 										var endTime = +new Date();
 										var timeDiff = endTime - currentTime;
 										outputCSV = "API,ResponseTime(ms) <br>" + apiName + "," + timeDiff.toString();
 										document.getElementById("test-results").innerHTML = outputCSV;
-										console.log("AllResponseHeaders");
-										console.log(xhttp.getAllResponseHeaders());
-										console.log("Response Time");
-										console.log(" -> " + outputCSV);
+										// console.log("AllResponseHeaders");
+										// console.log(xhttp.getAllResponseHeaders());
+										// console.log("Response Time");
+										// console.log(" -> " + outputCSV);
+
+										console.log('"test-results": {');
+										console.log('"api" : "' + apiName + '",');
+										console.log('"duration": ' + timeDiff + ',' );
+										console.log('"records" :' + records + ',');
+										console.log('"size" : 0,');
+										console.log('}');
 										// runBrowseRequest(outputCSV);
 										//alert(apiName + ' Duration: ' + timeDiff.toString());
 									}
@@ -170,40 +201,5 @@
 											var currentTime = +new Date();
 					xhttp.send();
 	}
-
-	function runBrowseRequest(outputCSV) {
-	var username = document.getElementById("username").value;
-	    var password = document.getElementById("password").value;
-	    var servername = "plli03.qad.com";
-	    var tomcatPort = "40011";
-	    var webapp = "qad-central";
-	    var baseURL = "https://" + servername + ":" + tomcatPort + "/" + webapp;
-	    var apiName = "sales-order-100";
-
-	    var xhttp = new XMLHttpRequest();
-	    xhttp.onreadystatechange = function () {
-	            if (xhttp.readyState == 4) {
-	                var endTime = +new Date();
-	                var timeDiff = endTime - currentTime;
-	                outputCSV = outputCSV + "<br> " + apiName + "," + timeDiff.toString();
-	                document.getElementById("test-results").innerHTML = outputCSV;
-	                console.log("AllResponseHeaders");
-	                console.log(xhttp.getAllResponseHeaders());
-	                console.log("Response Time");
-	                console.log(" -> " + outputCSV);
-	                //alert(apiName + ' Duration: ' + timeDiff.toString());
-	            }
-	        }
-	        // xhttp.open("POST", "https://plli03.qad.com:40011/qad-central/j_spring_security_check?j_username=mfg@qad.com&j_password=", true);
-	    xhttp.open("GET", baseURL + "/api/qracore/browses?browseId=mfg:so803&page=1&pageSize=100", true);
-	    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	    xhttp.setRequestHeader("Accept-Language", "en-US,en;q=0.8");
-	    xhttp.setRequestHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-	    xhttp.setRequestHeader("Accept-Language", "en-US,en;q=0.8");
-	    xhttp.setRequestHeader("Cache-Control", "max-age=0");
-	    xhttp.setRequestHeader('Authorization','Basic bWZnQHFhZC5jb206');
-	    var currentTime = +new Date();
-    xhttp.send();
-}
 
 }());
