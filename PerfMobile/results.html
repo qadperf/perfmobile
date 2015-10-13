@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kendo UI DataViz</title>
+    <meta charset="UTF-8" />
+
+    <link href="kendo/styles/kendo.dataviz.mobile.min.css" rel="stylesheet" />
+
+    <!-- Once the final theme is chosen the redundant css reference should removed -->
+    <link href="kendo/styles/kendo.dataviz.flat.min.css" rel="stylesheet" />
+    <link href="kendo/styles/kendo.dataviz.silver.min.css" rel="stylesheet" />
+
+    <link href="styles/main.css" rel="stylesheet" />
+
+    <script src="cordova.js"></script>
+    <script src="kendo/js/jquery.min.js"></script>
+    <script src="kendo/js/kendo.dataviz.mobile.min.js"></script>
+
+    <script src="scripts/app.js"></script>
+    <script src="scripts/perf-chart.js"></script>
+    <script src="scripts/avg-chart.js"></script>
+</head>
+
+<body>
+
+    <!-- Perf Chart View -->
+    <div id="tabstrip-perf-chart"
+        data-role="view"
+        data-title="Perf Chart"
+        data-show="app.perfChart.createPerfChart('Login')"
+        data-hide="app.perfChart.unbindResizeEvent"
+        data-stretch="true">
+
+        <div id="perf-chart"></div>
+    </div>
+
+    <!-- Avg Chart View -->
+    <div id="tabstrip-avg-chart"
+        data-role="view"
+        data-title="Avg Chart"
+        data-show="app.avgChart.createPerfChart()"
+        data-hide="app.avgChart.unbindResizeEvent"
+        data-stretch="true">
+
+        <div id="avg-chart"></div>
+    </div>
+
+    <!--Layout-->
+    <div data-role="layout" data-id="mobile-tabstrip">
+        <!--Footer-->
+        <div data-role="footer">
+            <div data-role="tabstrip">
+                <a href="#tabstrip-perf-chart" data-icon="featured">Perf Chart</a>
+                <a href="#tabstrip-avg-chart" data-icon="globe">Average Chart</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
