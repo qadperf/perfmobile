@@ -3,6 +3,7 @@
     // store a reference to the application object that will be created
     // later on so that we can use it if need be
     var app;
+    var everlive = new Everlive("InJzMMjAJq3F0qZ8");
 
     // create an object to store the models for each view
     window.APP = {
@@ -80,53 +81,26 @@
 
 					// This section needs to be replaced by reading the APIs to run from a JSON file
 
+					// jQuery to Read the JSON File for the APIs
+					var myResult;
+					$.when( $.ajax( "https://bs2.cdn.telerik.com/v1/InJzMMjAJq3F0qZ8/b8347810-71af-11e5-a0f8-3f206d96dc1a" )).done(function(result) {
+						myResult = result;
+
+					obj = JSON.parse(myResult);
+
 					// Set up the JSON Header Information
 					generateJSONResultHeader();
-					// Login API
-					requestURL = baseURL + "/j_spring_security_check?j_username=" + username + "&j_password=" + password;
-					requestType = "POST";
-					sendAPIRequest(requestURL, requestType, apiName, recordSize);
 
-					// Sales 100 Records
-					browseId = "mfg:so803";
-					recordSize = "100";
-					requestURL = baseURL + "/api/qracore/browses?browseId=" + browseId + "&page=1&pageSize=" + recordSize;
-					apiName = "SalesOrder-100";
-					requestType = "GET";
-					sendAPIRequest(requestURL, requestType, apiName, recordSize);
-
-					// Sales 10 Records
-					browseId = "mfg:so803";
-					recordSize = "10";
-					requestURL = baseURL + "/api/qracore/browses?browseId=" + browseId + "&page=1&pageSize=" + recordSize;
-					apiName = "SalesOrder-10";
-					requestType = "GET";
-					sendAPIRequest(requestURL, requestType, apiName, recordSize);
-
-					// Item Browse 10 Records
-					browseId = "mfg:gp340";
-					recordSize = "10";
-					requestURL = baseURL + "/api/qracore/browses?browseId=" + browseId + "&page=1&pageSize=" + recordSize;
-					apiName = "ItemName-10";
-					requestType = "GET";
-					sendAPIRequest(requestURL, requestType, apiName, recordSize);
-
-					// Item Browse 100 Records
-					browseId = "mfg:gp340";
-					recordSize = "100";
-					requestURL = baseURL + "/api/qracore/browses?browseId=" + browseId + "&page=1&pageSize=" + recordSize;
-					apiName = "ItemName-10";
-					requestType = "GET";
-					sendAPIRequest(requestURL, requestType, apiName, recordSize);
-
-					// Item Count Browse
-					requestURL = baseURL + "/api/qracore/browses/totalCount/?browseId=" + browseId;
-					apiName = "ItemName-Count";
-					requestType = "GET";
-					sendAPIRequest(requestURL, requestType, apiName, recordSize);
-
+					for (i = 0; i < obj.apis.length; i++) {
+					    requestURL = baseURL + "/" + obj.apis[i].api;
+					    requestType = obj.apis[i].type;
+					    apiName = obj.apis[i].name;
+					    //sendAPIRequest(requestURL, requestType, apiName, recordSize);
+					    sendAPIRequestJQuery(requestURL, requestType, apiName, recordSize);
+					}
 					// Close the JSON
 					generateJSONResultFooter();
+					});
 				}
             }
         }
@@ -170,6 +144,19 @@
 		console.log(']');
 	}
 
+	function getJSONAPIFile(){
+		alert('read-json-file');
+		//$.get("https://bs2.cdn.telerik.com/v1/InJzMMjAJq3F0qZ8/b8347810-71af-11e5-a0f8-3f206d96dc1a").then(function(result) { console.log(result)});
+		$.when($.get("https://bs2.cdn.telerik.com/v1/InJzMMjAJq3F0qZ8/b8347810-71af-11e5-a0f8-3f206d96dc1a")).then(function(result) { console.log(result)});
+		alert('read-json-file-complete');
+		//$.when($.get("https://bs2.cdn.telerik.com/v1/InJzMMjAJq3F0qZ8/b8347810-71af-11e5-a0f8-3f206d96dc1a"))).then(readJSONFile(result);
+
+	}
+
+	function readJSONFile(result){
+		console.log(result);
+	}
+
     function sendAPIRequest(api_url,reqType, apiName, records){
 		var outputCSV;
 		var j = document.getElementById("test-results");
@@ -189,7 +176,7 @@
 										console.log('}');
 									}
 						}
-							xhttp.open(reqType, api_url, true);
+							xhttp.open(reqType, api_url, false);
 											xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 											xhttp.setRequestHeader("Accept-Language", "en-US,en;q=0.8");
 											xhttp.setRequestHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
@@ -205,4 +192,25 @@
         return (emSize * input);
     };
 
+	function sendAPIRequestJQuery(api_url,reqType, apiName, records){
+
+		//xhttp.setRequestHeader('Authorization','Basic bWZnQHFhZC5jb206');
+
+
+		var currentTime = +new Date();
+		var outputCSV;
+		document.getElementById("test-results").innerHTML = "TEST-RAY: " + apiName;
+		$.when( $.ajax({method: reqType, async: false, url: api_url })).done(function(result) {
+			var endTime = +new Date();
+			var timeDiff = endTime - currentTime;
+			outputCSV = "API,ResponseTime(ms) <br>" + apiName + "," + timeDiff.toString();
+			console.log('"test-results": {');
+			console.log('"api" : "' + apiName + '",');
+			console.log('"duration": ' + timeDiff + ',' );
+			console.log('"records" :' + records + ',');
+			console.log('"size" : 0,');
+			console.log('}');
+			document.getElementById("test-results").innerHTML = "API-Running-Complete" + outputCSV;
+			});
+	}
 }());
