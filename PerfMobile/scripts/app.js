@@ -217,7 +217,7 @@
 
         // hide the splash screen as soon as the app is ready. otherwise
         // Cordova will wait 5 very long seconds to do it for you.
-        navigator.splashscreen.hide();
+        // navigator.splashscreen.hide();
 
         app = new kendo.mobile.Application(document.body, {
 
@@ -304,36 +304,38 @@
         //xhttp.setRequestHeader('Authorization','Basic bWZnQHFhZC5jb206');
 
 
-        var currentTime = +new Date();
-        var outputCSV;
-        var updateResult = currentResults;
-        document.getElementById("test-results").innerHTML = "TEST-RAY: " + apiName;
-        $.when( $.ajax({method: reqType, async: false, url: api_url })).done(function(result) {
-            var endTime = +new Date();
-            var timeDiff = endTime - currentTime;
-            outputCSV = "API,ResponseTime(ms) <br>" + apiName + "," + timeDiff.toString();
-            updateResult = updateResult + '{' + '"ping" : "' + pingTime + '",' + '"location" : "' + location + '",' + '"server" : "' + servername + '",' + '"datetime" : "' + dateTime + '",' + '"api" : "' + apiName + '",' + '"duration": ' + timeDiff + ',' + '"records" :' + records + ',' + '"size" : 0';
-            console.log('{');
-            console.log('"ping" : "' + pingTime + '",');
-            console.log('"location" : "' + location + '",');
-            console.log('"server" : "' + servername + '",');
-            console.log('"datetime" : "' + dateTime + '",');
-            console.log('"api" : "' + apiName + '",');
-            console.log('"duration": ' + timeDiff + ',' );
-            console.log('"records" :' + records + ',');
-            console.log('"size" : 0');
-            if(finalAPI == "yes"){
-                updateResult = updateResult + '}';
-                console.log('}');
-                }
-            else{
-                console.log('},');
-                updateResult = updateResult + '},';
-                }
-            document.getElementById("test-results").innerHTML = "API-Running-Complete" + outputCSV;
-            });
-            return updateResult;
-    }
+		var currentTime = +new Date();
+		var outputCSV;
+		var updateResult = currentResults;
+		document.getElementById("test-results").innerHTML = "TEST-RAY: " + apiName;
+		$.when( $.ajax({method: reqType, async: false, url: api_url })).done(function(data, status, xhr) {
+			var endTime = +new Date();
+			var timeDiff = endTime - currentTime;
+			outputCSV = "API,ResponseTime(ms) <br>" + apiName + "," + timeDiff.toString();
+			updateResult = updateResult + '{' + '"ping" : "' + pingTime + '",' + '"location" : "' + location + '",' + '"server" : "' + servername + '",' + '"datetime" : "' + xhr.getResponseHeader("Date") + '",' + '"api" : "' + apiName + '",' + '"duration": ' + timeDiff + ',' + '"records" :' + records + ',' + '"size" : 0';
+			console.log('{');
+			console.log('"ping" : "' + pingTime + '",');
+			console.log('"location" : "' + location + '",');
+			console.log('"server" : "' + servername + '",');
+			console.log('"datetime" : "' + dateTime + '",');
+			console.log('"api" : "' + apiName + '",');
+			console.log('"duration": ' + timeDiff + ',' );
+			console.log('"records" :' + records + ',');
+			console.log('"size" : 0');
+			console.log(xhr.getAllResponseHeaders());
+			console.log(xhr.getResponseHeader("Date"));
+			if(finalAPI == "yes"){
+				updateResult = updateResult + '}';
+				console.log('}');
+				}
+			else{
+				console.log('},');
+				updateResult = updateResult + '},';
+				}
+			document.getElementById("test-results").innerHTML = "API-Running-Complete" + outputCSV;
+			});
+			return updateResult;
+	}
 
     function loadInitialSettings(){
 
