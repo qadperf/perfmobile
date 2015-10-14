@@ -66,8 +66,10 @@
                     });
                 },
 				signInButton: function (e) {
-					var username = document.getElementById("username").value;
-					var password = document.getElementById("password").value;
+					// var username = document.getElementById("username").value;
+					// var password = document.getElementById("password").value;
+					var username = "mfg@qad.com";
+					var password = "";
 					var servername = "plli03.qad.com";
 					var tomcatPort = "40011";
 					var webapp = "qad-central";
@@ -78,28 +80,44 @@
 					var recordSize = "100";
 					var requestURL;
 					var browseId;
+					var apiTestResults = "";
+					var pingTime = "170";
+					var location = "Limerick, Ireland";
+					var dateTime = "14 Oct 2015 11:19:00";
+
 
 					// This section needs to be replaced by reading the APIs to run from a JSON file
 
 					// jQuery to Read the JSON File for the APIs
 					var myResult;
-					$.when( $.ajax( "https://bs2.cdn.telerik.com/v1/InJzMMjAJq3F0qZ8/b8347810-71af-11e5-a0f8-3f206d96dc1a" )).done(function(result) {
+					$.when( $.ajax( "https://bs3.cdn.telerik.com/v1/InJzMMjAJq3F0qZ8/afb35710-7259-11e5-81d6-bdefd425fbc7" )).done(function(result) {
 						myResult = result;
 
 					obj = JSON.parse(myResult);
 
-					// Set up the JSON Header Information
-					generateJSONResultHeader();
+
 
 					for (i = 0; i < obj.apis.length; i++) {
 					    requestURL = baseURL + "/" + obj.apis[i].api;
 					    requestType = obj.apis[i].type;
 					    apiName = obj.apis[i].name;
 					    //sendAPIRequest(requestURL, requestType, apiName, recordSize);
-					    sendAPIRequestJQuery(requestURL, requestType, apiName, recordSize);
+					    if(i == (obj.apis.length - 1)){
+							apiTestResults = sendAPIRequestJQuery(requestURL, requestType, apiName, recordSize, "yes", servername, pingTime, location, dateTime, apiTestResults);
+						}
+						else {
+							apiTestResults = sendAPIRequestJQuery(requestURL, requestType, apiName, recordSize, "no", servername, pingTime, location, dateTime, apiTestResults);
+						}
 					}
-					// Close the JSON
-					generateJSONResultFooter();
+
+					// Set JSON Headers and Footers
+					apiTestResults = "[" + apiTestResults + "]";
+					console.log(apiTestResults);
+
+					var parseResultsJSON = JSON.parse(apiTestResults);
+					for (i = 0; i < parseResultsJSON.length; i++) {
+						console.log("API: " + parseResultsJSON[i].api);
+					}
 					});
 				}
             }
@@ -130,17 +148,9 @@
 
     function generateJSONResultHeader(){
 		console.log('[');
-		console.log('{');
-		console.log('"test-info": {');
-		console.log(' "ping": "171",');
-		console.log('"location": "Limerick,Ireland",');
-		console.log('"server": "PLLI03",');
-		console.log(' "datetime": "11 Oct 2015 17:55:37"');
-		console.log('},');
 	}
 
 	function generateJSONResultFooter(){
-		console.log('}');
 		console.log(']');
 	}
 
@@ -186,26 +196,40 @@
 											var currentTime = +new Date();
 					xhttp.send();
 	}
-        
-	function sendAPIRequestJQuery(api_url,reqType, apiName, records){
+
+	function sendAPIRequestJQuery(api_url,reqType, apiName, records, finalAPI, servername, pingTime, location, dateTime, currentResults){
 
 		//xhttp.setRequestHeader('Authorization','Basic bWZnQHFhZC5jb206');
 
 
 		var currentTime = +new Date();
 		var outputCSV;
+		var updateResult = currentResults;
 		document.getElementById("test-results").innerHTML = "TEST-RAY: " + apiName;
 		$.when( $.ajax({method: reqType, async: false, url: api_url })).done(function(result) {
 			var endTime = +new Date();
 			var timeDiff = endTime - currentTime;
 			outputCSV = "API,ResponseTime(ms) <br>" + apiName + "," + timeDiff.toString();
-			console.log('"test-results": {');
+			updateResult = updateResult + '{' + '"ping" : "' + pingTime + '",' + '"location" : "' + location + '",' + '"server" : "' + servername + '",' + '"datetime" : "' + dateTime + '",' + '"api" : "' + apiName + '",' + '"duration": ' + timeDiff + ',' + '"records" :' + records + ',' + '"size" : 0';
+			console.log('{');
+			console.log('"ping" : "' + pingTime + '",');
+			console.log('"location" : "' + location + '",');
+			console.log('"server" : "' + servername + '",');
+			console.log('"datetime" : "' + dateTime + '",');
 			console.log('"api" : "' + apiName + '",');
 			console.log('"duration": ' + timeDiff + ',' );
 			console.log('"records" :' + records + ',');
-			console.log('"size" : 0,');
-			console.log('}');
+			console.log('"size" : 0');
+			if(finalAPI == "yes"){
+				updateResult = updateResult + '}';
+				console.log('}');
+				}
+			else{
+				console.log('},');
+				updateResult = updateResult + '},';
+				}
 			document.getElementById("test-results").innerHTML = "API-Running-Complete" + outputCSV;
 			});
+			return updateResult;
 	}
 }());
