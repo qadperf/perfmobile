@@ -1,3 +1,12 @@
+
+
+(function ($, console, doc) {
+	var settingsViewModel,
+	var addSettingsViewModel
+
+}());
+
+
 (function($, console, doc) {settingsModel
 
 settingsModel = kendo.data.ObservableObject.extend({

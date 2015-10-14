@@ -1,7 +1,24 @@
-body, html {
-    margin: 0;
-    height: 100%;
-    width: 100%;
+body, html .km-content{
+	background-image: url(../styles/images/backgroundColour.png);
+    width: 320px;
+    height: 250px;
+    text-align: center;
+	background-repeat: repeat;
+    margin: 0px auto;
+}
+
+
+
+
+#CorpStyle .km-content{
+ 
+background-image: url(../styles/images/backgroundColour.png);
+    width: 320px;
+    height: 250px;
+    text-align: center;
+	background-repeat: repeat;
+    margin: 0px auto;
+ 
 }
 
 .Running-API {

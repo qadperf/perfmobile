@@ -1,3 +1,35 @@
-<div data-role="view" data-title="Settings" data-layout="main" data-model="APP.models.settings">
-  <h1 data-bind="html: title"></h1>
+<div id="settings" data-role="view" data-style="inset" data-title="Settings" data-init="listViewCardsInit" data-layout="main" data-model="settingsViewModel">
+    <header data-role="header">
+        <div data-role="navbar">
+			<img id="corp-logo" src="../styles/images/QAD_Logo_Corp.png" data-align="left" style="width: 50px; height: 45px; margin-top: .4em"/>
+            <a id="newSettings" data-role="button" href="views/addSettings.html" data-align="right">Add</a>
+            <span data-role="view-title"></span>
+        </div>
+    </header>
+	<ul id="settingsList" 
+        data-role="listview" data-style="inset" 
+        data-bind="source: cards" data-template="settingsListTemplate">
+    </ul>
 </div>
+
+<script id="settingsListTemplate" type="text/x-kendo-template">
+        < div class="j-listview-item-content">
+            <span>Card Number: #:cardNumber#</span>
+            <span>Expires On: #:expireDate#</span>
+        </div>
+		<div class="j-listview-item-content">
+			<div>
+				<h1>serverinfo</h1>
+					<span>Username: #:username#</span>
+					<span>Server: #:server#</span>
+					<span>Tomcatport: #:tomcatport#</span>
+					<span>Tomcatwebapp: #:tomcatwebapp#</span>
+			</div>
+			<div>
+				<h1>Running API's</h1>
+					<span>Type: #:type#</span>
+					<span>Name: #:name#</span>
+					<span>API: #:api#</span>
+			</div>
+		</div>
+</script>
