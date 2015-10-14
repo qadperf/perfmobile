@@ -2,12 +2,13 @@
 var counter = 1;
 var limit = 10;
 function addInput(divName){
-     if (counter == limit)  {
+     if (counter >= limit)  {
           alert("You have reached the limit of adding " + counter + " inputs");
      }
      else {
-          var newdiv = document.createElement('div');
-          newdiv.innerHTML = "Entry " + (counter + 1) + " <br><input type='text' name='myInputs[]'>";
+          var newdiv = document.createElement('fieldset');
+		  var divString = "<legend>Running API" + (counter + 1) + '</legend><label>Type: <input type=""text"" name=""TypeInput[]""></label><br /><label>API Name: <input type=""text"" name=""ApiNameInput[]""></label><br /><label>API: <input type=""text"" name=""ApiInput[]""></label><br />';
+          newdiv.innerHTML = divString;
           document.getElementById(divName).appendChild(newdiv);
           counter++;
      }
@@ -16,11 +17,31 @@ function addInput(divName){
 
 <div data-role="view" data-title="Settings" data-layout="main" data-model="addSettingsViewModel">
 <form method="POST">
-	<div
+	<fieldset>
+		<legend>Server Information</legend>
+		<div><label for="username">Username:</label></div>
+		<input type="text" name="username" id="username"><br>
+		
+		<div><label for="password">Password:</label></div>
+		<input type="password" name="password" id="password"><br>
+		
+		<div><label for="server">Server:</label></div>
+		<input type="text" name="server" id="server"><br>
+		
+		<div><label for="tomcatport">Tomcat Port:</label></div>
+		<input type="text" name="tomcatport" id="tomcatport"><br>
+		
+		<div><label for="tomcatwebapp">Tomcat WebApp:</label></div>
+		<input type="text" name="tomcatwebapp" id="tomcatwebapp"><br>
+	</fieldset>
+	<fieldset id="dynamicInput">
+		<legend>Running API 1</legend>
+			<label>Type: <input type="text" name="TypeInput[]"></label><br />
+			<label>API Name: <input type="text" name="ApiNameInput[]"></label><br />
+			<label>API: <input type="text" name="ApiInput[]"></label><br />	
+	</fieldset>
 	
-	<div id="dynamicInput">API 1<br />
-		  <input type="text" name="myInputs[]">
-	</div>
-<p><input type="button" value="Add another text input" onClick="addInput('dynamicInput');"></p>
+	<input type="button" value="Add another text input" onClick="addInput('dynamicInput');">
+
 </form>
 </div>
