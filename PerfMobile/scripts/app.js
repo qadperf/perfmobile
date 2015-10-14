@@ -15,7 +15,7 @@
                 title: 'Settings'
             },
             results: {
-                title: 'Results'
+                title: 'Results',
                 drawAllCharts: function () {
                     var newChart;
 					var testResults = '[{"api": "Create"},{"api": "Login"},{"api": "Login"}]';
