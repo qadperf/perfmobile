@@ -16,7 +16,82 @@
             },
             results: {
                 title: 'Results'
+                drawAllCharts: function () {
+                    var newChart;
+					var testResults = '[{"api": "Create"},{"api": "Login"},{"api": "Login"}]';
+                    var api = [];
+                    var parseResultsJSON = JSON.parse(testResults);
+                    for (i = 0; i < parseResultsJSON.length; i++) {
+                        if (api.indexOf(parseResultsJSON[i].api) === -1) {
+                            api.push(parseResultsJSON[i].api);
+                        }
+                    }
+                    for (i = 0; i < api.length; i++) {
+                        //console.log("API: " + api[i]);
+                        newChart = document.createElement('div');
+                        newChart.setAttribute("id", api[i]);
+                        document.getElementById("charts").appendChild(newChart);
+                        drawPerfChart(api[i], "data/perf-results.json");
+                    }
 
+                    function drawPerfChart(api, results) {
+                        var id = "#" + api;
+                        $(id).kendoChart({
+                            theme: "Material",
+                            renderAs: "svg",
+                            dataSource: {
+                                transport: {
+                                    read: {
+                                        url: results,
+                                        dataType: "json"
+                                    }
+                                },
+                                sort: {
+                                    field: "datetime",
+                                    dir: "asc"
+                                },
+                                filter: {
+                                    "field": "api",
+                                    "operator": "eq",
+                                    "value": api
+                                }
+                            },
+                            valueAxis: {
+                                min: 0,
+                                title: {
+                                    text: "Milliseconds"
+                                }
+                            },
+                            chartArea: {
+                                width: $(window).width(),
+                                height: $(window).height()
+                            },
+                            title: {
+                                position: "top",
+                                text: api
+                            },
+                            legend: {
+                                position: "bottom"
+                            },
+                            seriesDefaults: {
+                                type: "line",
+                                style: "normal"
+                            },
+                            series: [
+                                {
+                                    field: "duration",
+                                    name: "Duration"
+
+                    },
+                                {
+                                    field: "ping",
+                                    name: "Ping"
+                    }
+                ],
+                            transitions: true
+                        });
+                    }
+                }
             },
             contacts: {
                 title: 'Contacts',
@@ -239,24 +314,24 @@
 			});
 			return updateResult;
 	}
-	
+
 	function loadInitialSettings(){
-            
+
 		if (window.localStorage.getItem("cards") === null) {
 			localStorage.setItem("cards", AppData.getInitialSettings());
 		}
-		
+
 		settingsViewModel.loadFromLocalStorage();
 	}
-		
+
 	var AppData = function() {
 		var initialSettings,
 			settingCache;
 
-		initialSettings = 
+		initialSettings =
 		[
 			{
-			"serverinfo": 
+			"serverinfo":
 			{
 				"username": "mfg@qad.com",
 				"password": "",
@@ -264,7 +339,7 @@
 				"tomcatport": "40011",
 				"tomcatwebapp": "qad-central"
 			},
-			"apis": 
+			"apis":
 			[
 				{
 					"type": "POST",
@@ -299,7 +374,7 @@
 				]
 			}
 		];
-		
+
 		settingCache = {
 			load: function(route, options) {
 				var path = route.path,
@@ -334,14 +409,14 @@
 
 				return dfd.promise();
 			},
-			
+
 			checkCache: function(path) {
 				var data,
 				path = JSON.stringify(path);
 
 				try {
 					data = JSON.parse(localStorage.getItem(path));
-					
+
 					if (data === null || data.expires <= new Date().getTime()) {
 						console.log("CACHE EMPTY", path);
 						return false;
@@ -355,7 +430,7 @@
 				console.log("CACHE CHECK", true, path);
 				return true;
 			},
-			
+
 			setCache: function(path, data, expires) {
 				var cache = {
 					data: data,
@@ -368,7 +443,7 @@
 
 				console.log("CACHE SET", cache, new Date(expires), path);
 			},
-			
+
 			getCache: function(path) {
 				var path = JSON.stringify(path),
 				cache = JSON.parse(localStorage.getItem(path));
@@ -379,7 +454,7 @@
 				return cache.data.data;
 			}
 		};
-		
+
 		return {
 			getInitialSettings: function() {
 				return JSON.stringify(initialSettings);
