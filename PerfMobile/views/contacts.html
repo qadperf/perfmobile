@@ -1,9 +1,18 @@
 <div data-role="view" data-title="Contacts" data-layout="main" data-model="APP.models.contacts">
-  <ul data-role="listview" data-style="inset" data-template="contactsTemplate" data-bind="source: ds"></ul>
+	<div class="content">
+		<div class="deviceInfo">
+			<input type="image" src="../styles/images/RedButton2.png" class="deviceInfoButton" data-role="button" data-bind="click: getInfo"/>			
+			
+			<div class="dLable">Device Model: 
+				<div class="dInfo" id="deviceModel"></div>
+			</div>
+			<div class="dLable">Device Version: 
+				<div class="dInfo" id="deviceVersion"></div>
+			</div>
+			<div class="dLable">Device Platform: 
+				<div class="dInfo" id="devicePlatform"></div>
+			</div>
+			
+		</div>
+	</div>
 </div>
-
-<!-- this is the template used by the listview. template items are automatically
-     wrapped in an <li> by Kendo UI Mobile -->
-<script type="text/x-kendo-template" id="contactsTemplate">
-  <a data-bind="click: alert">#: data.name #</a>
-</script>
