@@ -4,6 +4,30 @@ body, html {
     width: 100%;
 }
 
+.Running-API {
+	text-align: left;
+	color: #2D68F0;
+	background-color: #F3F3FB;
+    padding: 3px;
+}
+
+.deviceInfoButton {
+    text-align: center;
+	position: center center;
+	background-color: #F3F3FB;
+	color: #42454a;
+}
+
+.dInfo {
+	text-align: left;
+	background-color: #F3F3FB;
+    padding: #42454a;
+}
+
+.dLable {
+
+}
+
 /* COMMON STYLES*/
 .view-content h1 {
     color: #42454a;
