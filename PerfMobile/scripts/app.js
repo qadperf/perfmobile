@@ -68,34 +68,41 @@
 				signInButton: function (e) {
 					// var username = document.getElementById("username").value;
 					// var password = document.getElementById("password").value;
-					var username = "mfg@qad.com";
-					var password = "";
-					var servername = "plli03.qad.com";
-					var tomcatPort = "40011";
-					var webapp = "qad-central";
-					var baseURL = "https://" + servername + ":" + tomcatPort + "/" + webapp;
-					var apiName = "Login";
-					var outputCSV = "";
-					var requestType = "POST";
-					var recordSize = "100";
-					var requestURL;
-					var browseId;
-					var apiTestResults = "";
-					var pingTime = "170";
-					var location = "Limerick, Ireland";
-					var dateTime = "14 Oct 2015 11:19:00";
+					//var username = "mfg@qad.com";
+					//var password = "";
+					//var servername = "plli03.qad.com";
+					//var tomcatPort = "40011";
+					//var webapp = "qad-central";
+					//var baseURL = "https://" + servername + ":" + tomcatPort + "/" + webapp;
+					// var apiName = "Login";
 
 
 					// This section needs to be replaced by reading the APIs to run from a JSON file
 
 					// jQuery to Read the JSON File for the APIs
 					var myResult;
-					$.when( $.ajax( "https://bs3.cdn.telerik.com/v1/InJzMMjAJq3F0qZ8/afb35710-7259-11e5-81d6-bdefd425fbc7" )).done(function(result) {
+					$.when( $.ajax( "https://bs1.cdn.telerik.com/v1/InJzMMjAJq3F0qZ8/e826ec40-7260-11e5-a00b-c3dfcd47bf37" )).done(function(result) {
+
 						myResult = result;
 
 					obj = JSON.parse(myResult);
 
+					// Read Connection Information
+					var username = obj.serverinfo.username;
+					var password = obj.serverinfo.password;
+					var servername = obj.serverinfo.server;
+					var tomcatPort = obj.serverinfo.tomcatport;
+					var webapp = obj.serverinfo.tomcatwebapp;
+					var baseURL = "https://" + servername + ":" + tomcatPort + "/" + webapp;
+					var requestURL;
 
+					// var outputCSV = "";
+					var requestType = "POST";
+					var recordSize = "100";
+					var apiTestResults = "";
+					var pingTime = "170";
+					var location = "Limerick, Ireland";
+					var dateTime = "14 Oct 2015 11:19:00";
 
 					for (i = 0; i < obj.apis.length; i++) {
 					    requestURL = baseURL + "/" + obj.apis[i].api;
