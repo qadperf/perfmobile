@@ -183,7 +183,7 @@
 					requestURL = baseURL + "/" + "resources/qad/webshell/style/img/homepage.png";
 
 					// get ping time
-					getPing(requestURL,"GET");
+					// getPing(requestURL,"GET");
 
 					for (i = 0; i < obj.apis.length; i++) {
 					    requestURL = baseURL + "/" + obj.apis[i].api;
