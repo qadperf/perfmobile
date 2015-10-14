@@ -155,6 +155,7 @@
 					// This section needs to be replaced by reading the APIs to run from a JSON file
 
 					// jQuery to Read the JSON File for the APIs
+
 					var myResult;
 					$.when( $.ajax( "https://bs1.cdn.telerik.com/v1/InJzMMjAJq3F0qZ8/e826ec40-7260-11e5-a00b-c3dfcd47bf37" )).done(function(result) {
 
@@ -179,6 +180,11 @@
 					var location = "Limerick, Ireland";
 					var dateTime = "14 Oct 2015 11:19:00";
 
+					requestURL = baseURL + "/" + "resources/qad/webshell/style/img/homepage.png";
+
+					// get ping time
+					getPing(requestURL,"GET");
+
 					for (i = 0; i < obj.apis.length; i++) {
 					    requestURL = baseURL + "/" + obj.apis[i].api;
 					    requestType = obj.apis[i].type;
@@ -196,10 +202,10 @@
 					apiTestResults = "[" + apiTestResults + "]";
 					console.log(apiTestResults);
 
-					var parseResultsJSON = JSON.parse(apiTestResults);
-					for (i = 0; i < parseResultsJSON.length; i++) {
-						console.log("API: " + parseResultsJSON[i].api);
-					}
+					// Store the results
+					//writeResultsFile("api-test-results.json", apiTestResults);
+					updateResultsFile("api-test-results.json", apiTestResults);
+
 					});
 				}
             }
@@ -228,25 +234,41 @@
 
     }, false);
 
-    function generateJSONResultHeader(){
-		console.log('[');
+    function writeResultsFile(filename, jsonResults){
+		fileSystemHelper = new FileSystemHelper();
+		fileSystemHelper.writeLine(filename, jsonResults, function(result){console.log("file created");},function(error){console.log("file create failed");} );
 	}
 
-	function generateJSONResultFooter(){
-		console.log(']');
-	}
+	function updateResultsFile(filename, latestResults){
+		fileSystemHelper = new FileSystemHelper();
+		fileSystemHelper.readTextFromFile(filename,
+			function(result){
+				console.log("old-results");
+				console.log(result);
+				console.log("latest results");
+				console.log(latestResults);
+				var parseResultsJSON = JSON.parse(result);
 
-	function getJSONAPIFile(){
-		alert('read-json-file');
-		//$.get("https://bs2.cdn.telerik.com/v1/InJzMMjAJq3F0qZ8/b8347810-71af-11e5-a0f8-3f206d96dc1a").then(function(result) { console.log(result)});
-		$.when($.get("https://bs2.cdn.telerik.com/v1/InJzMMjAJq3F0qZ8/b8347810-71af-11e5-a0f8-3f206d96dc1a")).then(function(result) { console.log(result)});
-		alert('read-json-file-complete');
-		//$.when($.get("https://bs2.cdn.telerik.com/v1/InJzMMjAJq3F0qZ8/b8347810-71af-11e5-a0f8-3f206d96dc1a"))).then(readJSONFile(result);
+				parseResultsJSON.push({ping : "170", location : "Limerick", server : "plli03new.qad.com", datetime : "now", api : "test", duration : "150", records : "0", size : "0"});
+				var lastestJSONResults = JSON.parse(latestResults);
 
-	}
+				// Now we need to merge the results
+				for (i = 0; i < lastestJSONResults.length; i++) {
+					parseResultsJSON.push({ping : lastestJSONResults[i].ping, location : lastestJSONResults[i].location, server : lastestJSONResults[i].server, datetime : lastestJSONResults[i].datetime, api : lastestJSONResults[i].api, duration : lastestJSONResults[i].duration, records : lastestJSONResults[i].records, size : lastestJSONResults[i].size});
+				}
 
-	function readJSONFile(result){
-		console.log(result);
+				console.log("-----MergedData------");
+				var mergedResults = JSON.stringify(parseResultsJSON);
+				console.log(mergedResults);
+
+				// Write the latest results file
+				fileSystemHelper.writeLine(filename, mergedResults, function(result){console.log("file created");},function(error){console.log("file create failed");} );
+
+			},
+			function(error){
+				console.log("read file failed");
+			}
+		);
 	}
 
     function sendAPIRequest(api_url,reqType, apiName, records){
