@@ -18,9 +18,55 @@
                 title: 'Results',
                 drawAllCharts: function () {
 
+					latestResults = new FileSystemHelper();
+					latestResults.readTextFromFile("latest-results.json",function(result){
+
+					var parseResultsJSON = JSON.parse(result);
+
+					$("#latest").kendoChart({
+							theme: "Material",
+							dataSource: {
+								data: parseResultsJSON
+							},
+							valueAxis: {
+								min: 0,
+								title: {
+									text: "Milliseconds"
+								}
+							},
+							chartArea: {
+								width: $(window).width(),
+								height: $(window).height()-110
+							},
+							title: {
+								position: "top",
+								text: "Latest Results"
+							},
+							legend: {
+								position: "bottom"
+							},
+							seriesDefaults: {
+								type: "bar",
+								style: "normal"
+							},
+							series: [
+								{
+									field: "duration",
+									name: "Duration"
+
+								}
+							],
+							categoryAxis: {
+									field: "api"
+							},
+							transitions: true
+						});
+                	},function(error){});
+
+
 					// Read results file in local storage and process results if successfully read
-					fileSystemHelper = new FileSystemHelper();
-					fileSystemHelper.readTextFromFile("api-test-results.json",function(result){
+					allResults = new FileSystemHelper();
+					allResults.readTextFromFile("api-test-results.json",function(result){
 
 						var newChart;
 						var api = [];
