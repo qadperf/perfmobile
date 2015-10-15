@@ -205,7 +205,12 @@
 					// jQuery to Read the JSON File for the APIs
 
 					var myResult;
-					$.when( $.ajax( "https://bs1.cdn.telerik.com/v1/InJzMMjAJq3F0qZ8/e826ec40-7260-11e5-a00b-c3dfcd47bf37" )).done(function(result) {
+
+					readConfigFile = new FileSystemHelper();
+					// readConfigFile.readTextFromFile("application-configuration.json",function(result){var parseResultsJSON = JSON.parse(result);},function(error){});
+
+					//$.when( $.ajax( "https://bs1.cdn.telerik.com/v1/InJzMMjAJq3F0qZ8/e826ec40-7260-11e5-a00b-c3dfcd47bf37" )).done(function(result) {
+					readConfigFile.readTextFromFile("application-configuration.json",function(result){
 
                         myResult = result;
 
@@ -253,9 +258,29 @@
 					//writeResultsFile("api-test-results.json", apiTestResults);
 					updateResultsFile("api-test-results.json", apiTestResults);
 
-					});
-					// This is to test the create API
-				   //testCreateAPI();
+										console.log("----create-item-----");
+										// testCreateAPIEOS();
+
+										},
+										function(error){
+											console.log("FileDoesNotExist");
+											var initConfig = '{"serverinfo": {"username": "mfg@qad.com","password": "","server": "plli03.qad.com","tomcatport": "40011","tomcatwebapp": "qad-central"},';
+											document.getElementById("test-results").innerHTML = "ERROR <BR> No Server or APIS configured <BR> Use Settings to Configure Application";
+
+											initConfig = initConfig + '"apis": [';
+											initConfig = initConfig + '{"type": "POST","name": "Login","api": "j_spring_security_check?j_username=mfg@qad.com&j_password="},{"type": "GET","name": "Menus","api": "api/webshell/menu"},';
+											initConfig = initConfig + '{"type": "GET","name": "Sales-100","api": "api/qracore/browses?browseId=mfg:so803&page=1&pageSize=100"},';
+											initConfig = initConfig + '{"type": "GET","name": "Sales-10","api": "api/qracore/browses?browseId=mfg:so803&page=1&pageSize=10"},';
+											initConfig = initConfig + '{"type": "GET","name": "Item-100","api": "api/qracore/browses?browseId=mfg:gp340&page=1&pageSize=100"},';
+											initConfig = initConfig + '{"type": "GET","name": "Item-10","api": "api/qracore/browses?browseId=mfg:gp340&page=1&pageSize=10"},';
+											initConfig = initConfig + '{"type": "GET","name": "Item-Count","api": "api/qracore/browses/totalCount/?browseId=mfg:gp340"}';
+											initConfig = initConfig + ']';
+											console.log("--------------------------");
+											console.log(initConfig);
+
+										});
+										// This is to test the create API
+									   //testCreateAPI();
 				}
             }
         }
@@ -288,6 +313,7 @@
 	}
 
 	function updateResultsFile(filename, latestResults){
+		var storeLatestResults = "latest-results.json";
 		fileSystemHelper = new FileSystemHelper();
 		fileSystemHelper.readTextFromFile(filename,
 			function(result){
@@ -310,10 +336,13 @@
 
 				// Write the latest results file
 				fileSystemHelper.writeLine(filename, mergedResults, function(result){console.log("file created");},function(error){console.log("file create failed");} );
+				fileSystemHelper.writeLine(storeLatestResults, latestResults, function(result){console.log("file created");},function(error){console.log("file create failed");} );
 
 			},
 			function(error){
 				console.log("read file failed");
+				fileSystemHelper.writeLine(filename, latestResults, function(result){console.log("file created");},function(error){console.log("file create failed");} );
+				fileSystemHelper.writeLine(storeLatestResults, latestResults, function(result){console.log("file created");},function(error){console.log("file create failed");} );
 			}
 		);
 	}
