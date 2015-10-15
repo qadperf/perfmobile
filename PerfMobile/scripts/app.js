@@ -303,11 +303,9 @@
 					// Store the results
 					//writeResultsFile("api-test-results.json", apiTestResults);
 					updateResultsFile("api-test-results.json", apiTestResults);
-
-										console.log("----create-item-----");
-										// testCreateAPIEOS();
-
-										},
+					console.log("----create-item-----");
+				// testCreateAPIEOS();
+					},
 										function(error){
 											console.log("FileDoesNotExist");
 											var initConfig = '{"serverinfo": {"username": "mfg@qad.com","password": "","server": "plli03.qad.com","tomcatport": "40011","tomcatwebapp": "qad-central"},';
@@ -382,13 +380,16 @@
 
 				// Write the latest results file
 				fileSystemHelper.writeLine(filename, mergedResults, function(result){console.log("file created");},function(error){console.log("file create failed");} );
-				fileSystemHelper.writeLine(storeLatestResults, latestResults, function(result){console.log("file created");},function(error){console.log("file create failed");} );
+				fileSystemHelper.writeLine(storeLatestResults, latestResults, function(result){console.log("file created");app.navigate("views/results.html");},function(error){console.log("file create failed");} );
+
+				// window.location.href = "views/results.html";
+				//app.navigate("#results-screen");
 
 			},
 			function(error){
 				console.log("read file failed");
 				fileSystemHelper.writeLine(filename, latestResults, function(result){console.log("file created");},function(error){console.log("file create failed");} );
-				fileSystemHelper.writeLine(storeLatestResults, latestResults, function(result){console.log("file created");},function(error){console.log("file create failed");} );
+				fileSystemHelper.writeLine(storeLatestResults, latestResults, function(result){console.log("file created");app.navigate("views/results.html");},function(error){console.log("file create failed");} );
 			}
 		);
 	}
