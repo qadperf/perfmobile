@@ -1,10 +1,14 @@
 <div data-role="view" id="login" data-title="Run Test" data-layout="main" data-model="APP.models.login">
     <form>
-		<div id=centerdiv>
+		<div id="centerdiv">
 			<input id="round" type="submit" data-bind="click: signInButton" value="Test Speed" />
 			<!-- <button style="width: 100%" data-role="button" data-bind="click: signInButton" style="width: 60px; height: 100px;>Run Speedtest</button>-->
 		</div>
+		<div id="div-loading" style="display:none;">
+			<img src="../styles/images/loading-x.gif" class="Loading">
+		</div>
     </form>
+
 	<p id="test-results" data-style="inset"></p>
 	<p id="Running-API" data-style="inset"></p>
 </div>

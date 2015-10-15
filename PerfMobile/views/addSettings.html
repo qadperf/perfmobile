@@ -1,25 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <link href="kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
+    <link href="styles/main.css" rel="stylesheet" />
+    <script src="cordova.js"></script>
+    <script src="kendo/js/jquery.min.js"></script>
+    <script src="kendo/js/kendo.mobile.min.js"></script>
+    <script src="kendo/js/kendo.dataviz.mobile.min.js"></script>
+
+	<script src="scripts/app-execution.js"></script>
+	<script src="https://bs-static.cdn.telerik.com/1.4.1/everlive.all.min.js"></script>
+    <script src="scripts/app.js"></script>
+    <script type="text/javascript" charset="utf-8" src="scripts/fileHelper.js"></script>
+</head>
+
+<body>
+
 <script>
-var fileName = "test.json";
+var fileName = "application-configuration.json";
 var counter = 1;
 var limit = 7;
 var settingsData = readTextFromFile(fileName);
+var initialData; 
 //settingsData = JSON.parse(settingsData);
 
-function readTextFromFile(filename)
+function saveData()
 {
-	fileSystemHelper = new FileSystemHelper();
-	var data = fileSystemHelper.readTextFromFile(fileName, 
-	function(result){
+	readTextFromFile(fileName);
+}
+
+function readTextFromFile(filename)
+	{
+		fileSystemHelper = new FileSystemHelper();
 		console.log("file read");
-		return result;
-	}, 
-	function(error){
-		var mt = [];
-		console.log("file failed to read");
-		//console.log("read file failed");
-		return mt;
-	});
-};
+		var data = fileSystemHelper.readTextFromFile(fileName, function(result){
+			console.log(result);
+			initialData = JSON.parse(result);
+			var username = initialData.serverinfo.username;
+			document.getElementById("username").value = username;
+			var password = initialData.serverinfo.password;
+			document.getElementById("password").value = password;
+			var servername = initialData.serverinfo.server;
+			document.getElementById("server").value = servername;
+			var tomcatPort = initialData.serverinfo.tomcatport;
+			document.getElementById("tomcatport").value = tomcatPort;
+			var webapp = initialData.serverinfo.tomcatwebapp;
+			document.getElementById("tomcatwebapp").value = webapp;
+			return result;
+		}, 
+		function(error){
+			console.log("file failed to read");
+			//console.log("read file failed");
+		});
+	};
 
 function addInput(divName){
      if (counter >= limit)  {
@@ -36,7 +72,7 @@ function addInput(divName){
 
 function writeToFile(filename, jsonSettings){
 		fileSystemHelper = new FileSystemHelper();
-		fileSystemHelper.writeLine(filename, jsonSettings, 
+		fileSystemHelper.writeLine(fileName, jsonSettings, 
 		function(result){
 			console.log("file created");
 			return true;
@@ -48,60 +84,31 @@ function writeToFile(filename, jsonSettings){
 	}
 	
 function generateSettings(){
-	console.log($("#username").val());
-	var jsonSettings = JSON.stringify({
-	serverinfo : {
-		username : $("#username").val(),
-		password : $("#password").val(), 
-		server : $("#server").val(), 
-		tomcatport : $("#tomcatport").val(),
-		tomcatwebapp : $("#tomcatwebapp").val()
-	},
-	apis : [
+	var serverinfo = '{ "serverinfo": { "username ": "' + document.getElementById("username").value + '", ';
+	serverinfo += '"password" : "' + document.getElementById("password").value + '", ';
+	serverinfo += '"server" : "' + document.getElementById("server").value + '", ';
+	serverinfo += '"tomcatport" : "' + document.getElementById("tomcatport").value + '", ';
+	serverinfo += '"tomcatwebapp" : "' + document.getElementById("tomcatwebapp").value + '" }';
+	var api = ', "apis": [ ';
+	for (i = 0; i < counter; i++) 
+	{
+		var t = "type"+(i+1);
+		var n = "apiname"+(i+1);
+		var a = "api"+(i+1);
+		api += '{ "type" : "' + document.getElementById(t).value + '", ';
+		api += ' "name" : "' + document.getElementById(n).value + '", ';
+		api += ' "api" : "' + document.getElementById(a).value + '"}';
+		if (i < counter - 1)
 		{
-			type : $("#type1").val(),
-			name : $("#apiname1").val(), 
-			api : $("#api1").val() 
-		},
-		{
-			type : $("#type2").val(),
-			name : $("#apiname2").val(), 
-			api : $("#api2").val() 
-		},
-		{
-			type : $("#type3").val(),
-			name : $("#apiname3").val(), 
-			api : $("#api3").val() 
-		},
-		{
-			type : $("#type4").val(),
-			name : $("#apiname4").val(), 
-			api : $("#api4").val() 
-		},
-		{
-			type : $("#type5").val(),
-			name : $("#apiname5").val(), 
-			api : $("#api5").val() 
-		},
-		{
-			type : $("#type6").val(),
-			name : $("#apiname6").val(), 
-			api : $("#api6").val() 
-		},
-		{
-			type : $("#type7").val(),
-			name : $("#apiname7").val(), 
-			api : $("#api7").val() 
+			api += ', ';
 		}
-	]
+	}
+	api += '] }';
 	
-	});
-	//settingsData.push(jsonSettings);
-	writeToFile(fileName, JSON.stringify(settingsData));
-	//return true;
+	serverinfo = serverinfo + api;
+	writeToFile(fileName, serverinfo);
+	
 }
-
-$("#settingsForm").bind("submit", generateSettings()); 
 	
 </script>
 
@@ -134,7 +141,10 @@ $("#settingsForm").bind("submit", generateSettings());
 	</div>
 	
 	<input type="button" value="Add another text input" onClick="addInput('dynamicInput');">
-	
-	<input type="submit" value="Save" id="btnSave" onclick="generateSettings();">
 </form>
+	<button type="button" id="btnSave" value="Save" onClick="generateSettings()">Submit</button>
 </div>
+
+</body>
+
+</html>
