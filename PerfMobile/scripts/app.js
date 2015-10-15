@@ -280,10 +280,7 @@
                     var dateTime = "14 Oct 2015 11:19:00";
 
 					requestURL = baseURL + "/" + "resources/qad/webshell/style/img/homepage.png";
-
-					// get ping time
-										pingTime = Math.floor(Math.random()*(230-160+1)+160);
-
+					pingTime = Math.floor(Math.random()*(230-160+1)+160);
 
 					// getPing(requestURL,"GET");
 
