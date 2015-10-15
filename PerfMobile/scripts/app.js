@@ -188,6 +188,66 @@
                         navigator.notification.alert("Unfortunately an error occurred logging out of your account.");
                     });
                 },
+                signInButtonTest: function (e){
+					/*
+					var w;
+						w = new Worker("scripts/demo_workers.js");
+						w.onmessage = function(event) {
+						document.getElementById("test-results").innerHTML = event.data;
+				     };
+				     */
+
+
+
+
+									var myResult;
+									readConfigFile = new FileSystemHelper();
+									readConfigFile.readTextFromFile("application-configuration.json",function(result){
+										console.log("new-one");
+
+										updateUI("Running APIS");
+										myResult = result;
+										obj = JSON.parse(myResult);
+										var username = obj.serverinfo.username;
+										var password = obj.serverinfo.password;
+										var servername = obj.serverinfo.server;
+										var tomcatPort = obj.serverinfo.tomcatport;
+										var webapp = obj.serverinfo.tomcatwebapp;
+										var baseURL = "https://" + servername + ":" + tomcatPort + "/" + webapp;
+										var pingTime = Math.floor(Math.random()*(230-160+1)+160);
+										var recordSize = 0;
+										var apiTestResults = "";
+										var dateTime;
+										var location = "Limerick";
+										var requestURL;
+
+										//function workLoop() {
+										setTimeout(function(){
+
+										for (i = 0; i < obj.apis.length; i++) {
+											requestURL = baseURL + "/" + obj.apis[i].api;
+											requestType = obj.apis[i].type;
+											apiName = obj.apis[i].name;
+											updateUI("Running APIs " + i);
+
+											setTimeout(function(){
+											if(i == (obj.apis.length - 1)){
+												apiTestResults = sendAPIRequestJQuery(requestURL, requestType, apiName, recordSize, "yes", servername, pingTime, location, dateTime, apiTestResults);
+											}
+											else {
+												apiTestResults = sendAPIRequestJQuery(requestURL, requestType, apiName, recordSize, "no", servername, pingTime, location, dateTime, apiTestResults);
+											}
+
+											}, 0);
+										}
+
+										}, 500);
+
+
+										},function(error){
+											console.log("error")});
+				},
+
                 signInButton: function (e) {
                     // var username = document.getElementById("username").value;
                     // var password = document.getElementById("password").value;
@@ -236,7 +296,9 @@
 					pingTime = Math.floor(Math.random()*(230-160+1)+160);
 
 					// getPing(requestURL,"GET");
+					updateUI("Running APIS");
 
+					setTimeout(function() {
 					for (i = 0; i < obj.apis.length; i++) {
 					    requestURL = baseURL + "/" + obj.apis[i].api;
 					    requestType = obj.apis[i].type;
@@ -250,6 +312,8 @@
 						}
 					}
 
+
+
                     // Set JSON Headers and Footers
                     apiTestResults = "[" + apiTestResults + "]";
                     console.log(apiTestResults);
@@ -257,6 +321,7 @@
 					//writeResultsFile("api-test-results.json", apiTestResults);
 					updateResultsFile("api-test-results.json", apiTestResults);
 					console.log("----create-item-----");
+					}, 500);
 				// testCreateAPIEOS();
 					},
 										function(error){
@@ -277,8 +342,8 @@
 
 										});
 										// create and delete APIs
-									   createAPI();
-                                       deleteAPI();
+									   // createAPI();
+                                       // deleteAPI();
 				}
             }
         }
@@ -342,7 +407,7 @@
 
 				// Write the latest results file
 				fileSystemHelper.writeLine(filename, mergedResults, function(result){console.log("file created");},function(error){console.log("file create failed");} );
-				fileSystemHelper.writeLine(storeLatestResults, latestResults, function(result){console.log("file created");app.navigate("views/results.html");},function(error){console.log("file create failed");} );
+				fileSystemHelper.writeLine(storeLatestResults, latestResults, function(result){console.log("file created");updateUI("");app.navigate("views/results.html");;},function(error){console.log("file create failed");} );
 
 				// window.location.href = "views/results.html";
 				//app.navigate("#results-screen");
@@ -351,7 +416,7 @@
 			function(error){
 				console.log("read file failed");
 				fileSystemHelper.writeLine(filename, latestResults, function(result){console.log("file created");},function(error){console.log("file create failed");} );
-				fileSystemHelper.writeLine(storeLatestResults, latestResults, function(result){console.log("file created");app.navigate("views/results.html");},function(error){console.log("file create failed");} );
+				fileSystemHelper.writeLine(storeLatestResults, latestResults, function(result){console.log("file created");updateUI("");app.navigate("views/results.html");},function(error){console.log("file create failed");} );
 			}
 		);
 	}
@@ -394,7 +459,6 @@
 		var currentTime = +new Date();
 		var outputCSV;
 		var updateResult = currentResults;
-		document.getElementById("test-results").innerHTML = "TEST-RAY: " + apiName;
 		$.when( $.ajax({method: reqType, async: false, url: api_url })).done(function(data, status, xhr) {
 			var endTime = +new Date();
 			var timeDiff = endTime - currentTime;
@@ -419,7 +483,7 @@
 				console.log('},');
 				updateResult = updateResult + '},';
 				}
-			document.getElementById("test-results").innerHTML = "API-Running-Complete" + outputCSV;
+			// document.getElementById("test-results").innerHTML = "API-Running-Complete" + outputCSV;
 			});
 			return updateResult;
 	}
@@ -570,6 +634,10 @@
             }
         };
     }
+
+    function updateUI(updateMe){
+		document.getElementById("test-results").innerHTML = updateMe;
+	}
 
     function createAPI() {
                     var servername = "plli03.qad.com";
