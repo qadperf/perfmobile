@@ -35,6 +35,17 @@ input#round{
 }
 /***NOW STYLE THE BUTTON'S HOVER STATE***/
 input#round:hover{
+	background:#005C1F;
+	border:1px solid #005C1F;
+	color:#fff;
+	font-size:1.5em;
+	/*reduce the size of the shadow to give a pushed effect*/
+	-webkit-box-shadow: 0px 0px 5px rgba(0,0,0, .75);
+	-moz-box-shadow: 0px 0px 5px rgba(0,0,0, .75);
+	box-shadow: 0px 0px 5px rgba(0,0,0, .75);
+}
+
+input#round:active{
 	background:#FF0000;
 	border:1px solid #FF0000;
 	color:#FF0000;

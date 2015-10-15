@@ -1,4 +1,52 @@
-<div id="settings" data-role="view" data-style="inset" data-title="Settings" data-init="listViewCardsInit" data-layout="main" data-model="settingsViewModel">
+
+<script>
+	var fileName = "test.json";
+	var settingsObject;
+	var out = "<table>";
+	
+	readTextFromFile(fileName);
+	
+	function readTextFromFile(filename)
+	{
+		fileSystemHelper = new FileSystemHelper();
+		var data = fileSystemHelper.readTextFromFile(fileName, 
+		function(result){
+			var test = JSON.stringify(result);
+			console.log(test);
+			//console.log(test[1][0].username);
+			var i;
+			out = "<table>";
+			for(i = 0; i < test.length; i++) {
+			out += "<tr><td>" +
+			test.username +
+			"</td><td>" +
+			test.server +
+			"</td><td>" +
+			test.tomcatport +
+			"</td></tr>";
+			}
+		out += "</table>";
+		//document.getElementById("settingsDisplay").innerHTML = out;
+		document.getElementById("settingsDisplay").innerHTML = test;
+			return result;
+		}, 
+		function(error){
+			console.log("read file failed");
+			return 0;
+		});
+	};        
+	
+</script>
+
+<script type="text/x-kendoui-template" id="settings-template">
+  <div 
+    data-role="listview"
+    data-bind="source: settingsDataSource"
+  ></div>
+</script>
+
+
+<div id="settings" data-role="view" data-style="inset" data-title="Settings" data-layout="main" data-model="settingsViewModel">
     <header data-role="header">
         <div id="navbarplain" data-role="navbar">
 			<img id="corplogo" src="../styles/images/QAD_Logo_Corp.png" data-align="left"
@@ -7,30 +55,5 @@
             <span data-role="view-title"></span>
         </div>
     </header>
-	<ul id="settingsList" 
-        data-role="listview" data-style="inset" 
-        data-bind="source: cards" data-template="settingsListTemplate">
-    </ul>
+	<p id="settingsDisplay" data-style="inset"></p>
 </div>
-
-<script id="settingsListTemplate" type="text/x-kendo-template">
-        < div class="j-listview-item-content">
-            <span>Card Number: #:cardNumber#</span>
-            <span>Expires On: #:expireDate#</span>
-        </div>
-		<div class="j-listview-item-content">
-			<div>
-				<h1>serverinfo</h1>
-					<span>Username: #:username#</span>
-					<span>Server: #:server#</span>
-					<span>Tomcatport: #:tomcatport#</span>
-					<span>Tomcatwebapp: #:tomcatwebapp#</span>
-			</div>
-			<div>
-				<h1>Running API's</h1>
-					<span>Type: #:type#</span>
-					<span>Name: #:name#</span>
-					<span>API: #:api#</span>
-			</div>
-		</div>
-</script>

@@ -1,22 +1,112 @@
 <script>
+var fileName = "test.json";
 var counter = 1;
-var limit = 10;
+var limit = 7;
+var settingsData = readTextFromFile(fileName);
+//settingsData = JSON.parse(settingsData);
+
+function readTextFromFile(filename)
+{
+	fileSystemHelper = new FileSystemHelper();
+	var data = fileSystemHelper.readTextFromFile(fileName, 
+	function(result){
+		console.log("file read");
+		return result;
+	}, 
+	function(error){
+		var mt = [];
+		console.log("file failed to read");
+		//console.log("read file failed");
+		return mt;
+	});
+};
+
 function addInput(divName){
      if (counter >= limit)  {
           alert("You have reached the limit of adding " + counter + " inputs");
      }
      else {
           var newdiv = document.createElement('fieldset');
-		  var divString = "<legend>Running API" + (counter + 1) + '</legend><label>Type: <input type=""text"" name=""TypeInput[]""></label><br /><label>API Name: <input type=""text"" name=""ApiNameInput[]""></label><br /><label>API: <input type=""text"" name=""ApiInput[]""></label><br />';
+		  var divString = "<legend>Running API " + (counter + 1) + '</legend><div><label>Type: <input type="text" name="TypeInput[]" id="type' + (counter + 1) + '"></label></div><div><label>API Name: <input type="text" name="ApiNameInput[]" id="apiname' + (counter + 1) + '"></label></div><div><label>API: <input type="text" name="ApiInput[]" id="api' + (counter + 1) +'"></label></div>';
           newdiv.innerHTML = divString;
           document.getElementById(divName).appendChild(newdiv);
           counter++;
      }
 }
+
+function writeToFile(filename, jsonSettings){
+		fileSystemHelper = new FileSystemHelper();
+		fileSystemHelper.writeLine(filename, jsonSettings, 
+		function(result){
+			console.log("file created");
+			return true;
+		},
+		function(error){
+			console.log("file create failed");
+			return false;
+		});
+	}
+	
+function generateSettings(){
+	console.log($("#username").val());
+	var jsonSettings = JSON.stringify({
+	serverinfo : {
+		username : $("#username").val(),
+		password : $("#password").val(), 
+		server : $("#server").val(), 
+		tomcatport : $("#tomcatport").val(),
+		tomcatwebapp : $("#tomcatwebapp").val()
+	},
+	apis : [
+		{
+			type : $("#type1").val(),
+			name : $("#apiname1").val(), 
+			api : $("#api1").val() 
+		},
+		{
+			type : $("#type2").val(),
+			name : $("#apiname2").val(), 
+			api : $("#api2").val() 
+		},
+		{
+			type : $("#type3").val(),
+			name : $("#apiname3").val(), 
+			api : $("#api3").val() 
+		},
+		{
+			type : $("#type4").val(),
+			name : $("#apiname4").val(), 
+			api : $("#api4").val() 
+		},
+		{
+			type : $("#type5").val(),
+			name : $("#apiname5").val(), 
+			api : $("#api5").val() 
+		},
+		{
+			type : $("#type6").val(),
+			name : $("#apiname6").val(), 
+			api : $("#api6").val() 
+		},
+		{
+			type : $("#type7").val(),
+			name : $("#apiname7").val(), 
+			api : $("#api7").val() 
+		}
+	]
+	
+	});
+	//settingsData.push(jsonSettings);
+	writeToFile(fileName, JSON.stringify(settingsData));
+	//return true;
+}
+
+$("#settingsForm").bind("submit", generateSettings()); 
+	
 </script>
 
 <div data-role="view" data-title="Settings" data-layout="main" data-model="addSettingsViewModel">
-<form method="POST">
+<form method="POST" id="settingsForm">
 	<fieldset>
 		<legend>Server Information</legend>
 		<div><label for="username">Username:</label></div>
@@ -34,14 +124,17 @@ function addInput(divName){
 		<div><label for="tomcatwebapp">Tomcat WebApp:</label></div>
 		<input type="text" name="tomcatwebapp" id="tomcatwebapp"><br>
 	</fieldset>
-	<fieldset id="dynamicInput">
+	<div id="dynamicInput">
+	<fieldset>
 		<legend>Running API 1</legend>
-			<label>Type: <input type="text" name="TypeInput[]"></label><br />
-			<label>API Name: <input type="text" name="ApiNameInput[]"></label><br />
-			<label>API: <input type="text" name="ApiInput[]"></label><br />	
+			<div><label>Type: <input type="text" name="TypeInput[]" id="type1"></label></div>
+			<div><label>API Name: <input type="text" name="ApiNameInput[]" id="apiname1"></label></div>
+			<div><label>API: <input type="text" name="ApiInput[]" id="api1"></label><br /></div>	
 	</fieldset>
+	</div>
 	
 	<input type="button" value="Add another text input" onClick="addInput('dynamicInput');">
-
+	
+	<input type="submit" value="Save" id="btnSave" onclick="generateSettings();">
 </form>
 </div>
