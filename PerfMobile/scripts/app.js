@@ -367,7 +367,7 @@
 				console.log(latestResults);
 				var parseResultsJSON = JSON.parse(result);
 
-				parseResultsJSON.push({ping : "170", location : "Limerick", server : "plli03new.qad.com", datetime : "now", api : "test", duration : "150", records : "0", size : "0"});
+				// parseResultsJSON.push({ping : "170", location : "Limerick", server : "plli03new.qad.com", datetime : "now", api : "test", duration : "150", records : "0", size : "0"});
 				var lastestJSONResults = JSON.parse(latestResults);
 				// Now we need to merge the results
 				for (i = 0; i < lastestJSONResults.length; i++) {
