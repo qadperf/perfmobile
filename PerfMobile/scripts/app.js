@@ -36,7 +36,7 @@
 							},
 							chartArea: {
 								width: $(window).width(),
-								height: $(window).height()-110
+								height: $(window).height()-110,
 							},
 							title: {
 								position: "top",
@@ -111,7 +111,7 @@
 								},
 								chartArea: {
 									width: $(window).width(),
-									height: $(window).height()-110
+									height: $(window).height()-120
 								},
 								title: {
 									position: "top",
@@ -139,54 +139,7 @@
 							});
 						}
                 	},function(error){});
-                },
-				drawLatestChart: function () {
-
-					fileSystemHelper = new FileSystemHelper();
-					fileSystemHelper.readTextFromFile("latest-results.json",function(result){
-
-					var parseResultsJSON = JSON.parse(result);
-
-					$("#latest").kendoChart({
-							theme: "Material",
-							dataSource: {
-								data: parseResultsJSON
-							},
-							valueAxis: {
-								min: 0,
-								title: {
-									text: "Milliseconds"
-								}
-							},
-							chartArea: {
-								width: $(window).width(),
-								height: $(window).height()-110
-							},
-							title: {
-								position: "top",
-								text: "Latest Results"
-							},
-							legend: {
-								position: "bottom"
-							},
-							seriesDefaults: {
-								type: "column",
-								style: "normal"
-							},
-							series: [
-								{
-									field: "duration",
-									name: "Duration"
-
-								}
-							],
-							categoryAxis: {
-									field: "api"
-							},
-							transitions: true
-						});
-                	},function(error){});
-				}
+                }
             },
             contacts: {
                 title: 'Contacts',
@@ -349,6 +302,12 @@
             // the application needs to know which view to load first
             initial: 'views/runTest.html'
         });
+
+	//reload charts when orientation changes
+	document.addEventListener("orientationchange", function() {
+	    APP.models.results.drawAllCharts();
+	});
+
 
     }, false);
     function writeResultsFile(filename, jsonResults){

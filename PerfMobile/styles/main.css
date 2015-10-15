@@ -1,16 +1,16 @@
 body, html .km-content{
 	background-image: url(../styles/images/white.PNG);
-    width: 320px;
-    height: 250px;
+    width: 100%;
+    height: 100%;
     text-align: center;
 	background-repeat: repeat;
     margin: 0px auto;
 }
 
 img #corplogo{
-	width: 50px;
-	height: 45px; 
-	margin-top: .4em
+	width: 40px;
+	height: 35px; 
+	margin-top: .2em
 }
 
 div #navbarplain{
