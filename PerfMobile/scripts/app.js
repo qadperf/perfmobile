@@ -18,9 +18,9 @@
                 title: 'Results',
                 drawAllCharts: function () {
                     var newChart;
-                    var testResults = '[{"api": "Create"},{"api": "Login"},{"api": "Login"}]';
+                    var resultsFile = "data/perf-results.json";
                     var api = [];
-                    var parseResultsJSON = JSON.parse(testResults);
+                    var parseResultsJSON = JSON.parse(resultsFile);
                     for (i = 0; i < parseResultsJSON.length; i++) {
                         if (api.indexOf(parseResultsJSON[i].api) === -1) {
                             api.push(parseResultsJSON[i].api);
@@ -31,14 +31,13 @@
                         newChart = document.createElement('div');
                         newChart.setAttribute("id", api[i]);
                         document.getElementById("charts").appendChild(newChart);
-                        drawPerfChart(api[i], "data/perf-results.json");
+                        drawPerfChart(api[i], resultsFile);
                     }
 
                     function drawPerfChart(api, results) {
                         var id = "#" + api;
                         $(id).kendoChart({
                             theme: "Material",
-                            renderAs: "svg",
                             dataSource: {
                                 transport: {
                                     read: {
@@ -64,7 +63,7 @@
                             },
                             chartArea: {
                                 width: $(window).width(),
-                                height: $(window).height()
+                                height: $(window).height()-110
                             },
                             title: {
                                 position: "top",
@@ -91,7 +90,54 @@
                             transitions: true
                         });
                     }
-                }
+                },
+				drawLatestChart: function () {
+                    var resultsFile = "data/latest-results.json";
+
+					$("#latest").kendoChart({
+						theme: "Material",
+						dataSource: {
+							transport: {
+								read: {
+									url: resultsFile,
+									dataType: "json"
+								}
+							}
+						},
+						valueAxis: {
+							min: 0,
+							title: {
+								text: "Milliseconds"
+							}
+						},
+						chartArea: {
+							width: $(window).width(),
+							height: $(window).height()-110
+						},
+						title: {
+							position: "top",
+							text: "Test Results"
+						},
+						legend: {
+							position: "bottom"
+						},
+						seriesDefaults: {
+							type: "bar",
+							style: "normal"
+						},
+						series: [
+							{
+								field: "duration",
+								name: "Duration"
+
+							}
+						],
+						categoryAxis: {
+						        field: "api"
+    					},
+						transitions: true
+					});
+				}
             },
             contacts: {
                 title: 'Contacts',
