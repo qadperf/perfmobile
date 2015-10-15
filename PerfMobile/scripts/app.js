@@ -305,7 +305,9 @@
 
 	//reload charts when orientation changes
 	window.addEventListener("orientationchange", function() {
-	    APP.models.results.drawAllCharts();
+		if($('#charts').length){
+	    	APP.models.results.drawAllCharts();
+		}
 	});
 
 
