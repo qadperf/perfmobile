@@ -304,7 +304,7 @@
         });
 
 	//reload charts when orientation changes
-	document.addEventListener("orientationchange", function() {
+	window.addEventListener("orientationchange", function() {
 	    APP.models.results.drawAllCharts();
 	});
 
