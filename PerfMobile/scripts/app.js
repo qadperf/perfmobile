@@ -18,9 +18,9 @@
                 title: 'Results',
                 drawAllCharts: function () {
                     var newChart;
-                    var resultsFile = "data/perf-results.json";
+                    var testResults = '[{"api": "Create"},{"api": "Login"},{"api": "Login"}]';
                     var api = [];
-                    var parseResultsJSON = JSON.parse(resultsFile);
+                    var parseResultsJSON = JSON.parse(testResults);
                     for (i = 0; i < parseResultsJSON.length; i++) {
                         if (api.indexOf(parseResultsJSON[i].api) === -1) {
                             api.push(parseResultsJSON[i].api);
@@ -31,9 +31,8 @@
                         newChart = document.createElement('div');
                         newChart.setAttribute("id", api[i]);
                         document.getElementById("charts").appendChild(newChart);
-                        drawPerfChart(api[i], resultsFile);
+                        drawPerfChart(api[i], "data/perf-results.json");
                     }
-
                     function drawPerfChart(api, results) {
                         var id = "#" + api;
                         $(id).kendoChart({
@@ -116,13 +115,13 @@
 						},
 						title: {
 							position: "top",
-							text: "Test Results"
+							text: "Latest Results"
 						},
 						legend: {
 							position: "bottom"
 						},
 						seriesDefaults: {
-							type: "bar",
+							type: "column",
 							style: "normal"
 						},
 						series: [
@@ -536,7 +535,7 @@
                     var webapp = "qad-central";
                     var baseURL = "https://" + servername + ":" + tomcatPort + "/" + webapp;
                     var requestURL;
-                        
+
                     requestURL = baseURL + "/api/erp/items?domainCode=10USA&itemCode=MYADEMO-01";
                     apiName = "ItemID-MYADEMO01";
                     var jsonItem = {
@@ -547,7 +546,7 @@
                     }]
                     };
                     sendAPIPOSTJQuery(requestURL, apiName, jsonItem);
-                        
+
                     requestURL = baseURL + "/api/erp/countries?countryCode=MYA";
                     apiName = "Country-MYA";
 
@@ -577,9 +576,9 @@
                                         "QADD01" : 0
                                     }
                             ]
-                            
+
                         }
-     
+
                         sendAPIPOSTJQuery(requestURL, apiName, jsonCountry);
 
     }
@@ -600,7 +599,7 @@
              data: JSON.stringify(jsonString),
              contentType: 'application/json;charset=UTF-8',
              complete: function(xhr, status) {
-                 console.log("Status: " + status);   
+                 console.log("Status: " + status);
              },
              beforeSend: function(xhr) {
                  xhr.setRequestHeader("Accept-Language", "en-US,en;q=0.8");
@@ -621,7 +620,7 @@
                  console.log('}');
                  document.getElementById("test-results").innerHTML = "CREATE API-Running-Complete" + outputCSV;
 
-                 alert(apiName + " " + "Done!"); 
+                 alert(apiName + " " + "Done!");
              },
              error: function() {
                  alert(apiName + " " + "Failed!");
