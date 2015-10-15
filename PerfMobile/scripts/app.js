@@ -17,78 +17,82 @@
             results: {
                 title: 'Results',
                 drawAllCharts: function () {
-                    var newChart;
-                    var testResults = '[{"api": "Create"},{"api": "Login"},{"api": "Login"}]';
-                    var api = [];
-                    var parseResultsJSON = JSON.parse(testResults);
-                    for (i = 0; i < parseResultsJSON.length; i++) {
-                        if (api.indexOf(parseResultsJSON[i].api) === -1) {
-                            api.push(parseResultsJSON[i].api);
-                        }
-                    }
-                    for (i = 0; i < api.length; i++) {
-                        //console.log("API: " + api[i]);
-                        newChart = document.createElement('div');
-                        newChart.setAttribute("id", api[i]);
-                        document.getElementById("charts").appendChild(newChart);
-                        drawPerfChart(api[i], "data/perf-results.json");
-                    }
-                    function drawPerfChart(api, results) {
-                        var id = "#" + api;
-                        $(id).kendoChart({
-                            theme: "Material",
-                            dataSource: {
-                                transport: {
-                                    read: {
-                                        url: results,
-                                        dataType: "json"
-                                    }
-                                },
-                                sort: {
-                                    field: "datetime",
-                                    dir: "asc"
-                                },
-                                filter: {
-                                    "field": "api",
-                                    "operator": "eq",
-                                    "value": api
-                                }
-                            },
-                            valueAxis: {
-                                min: 0,
-                                title: {
-                                    text: "Milliseconds"
-                                }
-                            },
-                            chartArea: {
-                                width: $(window).width(),
-                                height: $(window).height()-110
-                            },
-                            title: {
-                                position: "top",
-                                text: api
-                            },
-                            legend: {
-                                position: "bottom"
-                            },
-                            seriesDefaults: {
-                                type: "line",
-                                style: "normal"
-                            },
-                            series: [
-                                {
-                                    field: "duration",
-                                    name: "Duration"
 
-                    },
-                                {
-                                    field: "ping",
-                                    name: "Ping"
-                    }
-                ],
-                            transitions: true
-                        });
-                    }
+					// Read results file in local storage and process results if successfully read
+					fileSystemHelper = new FileSystemHelper();
+					fileSystemHelper.readTextFromFile("api-test-results.json",function(result){
+
+						var newChart;
+						var api = [];
+						var parseResultsJSON = JSON.parse(result);
+
+						// Get unique api names for filtering
+						for (i = 0; i < parseResultsJSON.length; i++) {
+							if (api.indexOf(parseResultsJSON[i].api) === -1) {
+								api.push(parseResultsJSON[i].api);
+							}
+						}
+
+						//Create div and graph for each api
+						for (i = 0; i < api.length; i++) {
+							newChart = document.createElement('div');
+							newChart.setAttribute("id", api[i]);
+							document.getElementById("charts").appendChild(newChart);
+							drawPerfChart(api[i], parseResultsJSON);
+						}
+
+						function drawPerfChart(api, parseResultsJSON) {
+							var id = "#" + api;
+							$(id).kendoChart({
+								theme: "Material",
+								dataSource: {
+									data: parseResultsJSON,
+									sort: {
+										field: "datetime",
+										dir: "asc"
+									},
+									filter: {
+										"field": "api",
+										"operator": "eq",
+										"value": api
+									}
+								},
+								valueAxis: {
+									min: 0,
+									title: {
+										text: "Milliseconds"
+									}
+								},
+								chartArea: {
+									width: $(window).width(),
+									height: $(window).height()-110
+								},
+								title: {
+									position: "top",
+									text: api
+								},
+								legend: {
+									position: "bottom"
+								},
+								seriesDefaults: {
+									type: "line",
+									style: "normal"
+								},
+								series: [
+									{
+										field: "duration",
+										name: "Duration"
+
+									},
+									{
+										field: "ping",
+										name: "Ping"
+									}
+								],
+								transitions: true
+							});
+						}
+                	},function(error){});
                 },
 				drawLatestChart: function () {
                     var resultsFile = "data/latest-results.json";
