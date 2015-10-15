@@ -95,51 +95,51 @@
                 	},function(error){});
                 },
 				drawLatestChart: function () {
-                    var resultsFile = "data/latest-results.json";
+
+					fileSystemHelper = new FileSystemHelper();
+					fileSystemHelper.readTextFromFile("latest-results.json",function(result){
+
+					var parseResultsJSON = JSON.parse(result);
 
 					$("#latest").kendoChart({
-						theme: "Material",
-						dataSource: {
-							transport: {
-								read: {
-									url: resultsFile,
-									dataType: "json"
+							theme: "Material",
+							dataSource: {
+								data: parseResultsJSON
+							},
+							valueAxis: {
+								min: 0,
+								title: {
+									text: "Milliseconds"
 								}
-							}
-						},
-						valueAxis: {
-							min: 0,
+							},
+							chartArea: {
+								width: $(window).width(),
+								height: $(window).height()-110
+							},
 							title: {
-								text: "Milliseconds"
-							}
-						},
-						chartArea: {
-							width: $(window).width(),
-							height: $(window).height()-110
-						},
-						title: {
-							position: "top",
-							text: "Latest Results"
-						},
-						legend: {
-							position: "bottom"
-						},
-						seriesDefaults: {
-							type: "column",
-							style: "normal"
-						},
-						series: [
-							{
-								field: "duration",
-								name: "Duration"
+								position: "top",
+								text: "Latest Results"
+							},
+							legend: {
+								position: "bottom"
+							},
+							seriesDefaults: {
+								type: "column",
+								style: "normal"
+							},
+							series: [
+								{
+									field: "duration",
+									name: "Duration"
 
-							}
-						],
-						categoryAxis: {
-						        field: "api"
-    					},
-						transitions: true
-					});
+								}
+							],
+							categoryAxis: {
+									field: "api"
+							},
+							transitions: true
+						});
+                	},function(error){});
 				}
             },
             contacts: {
