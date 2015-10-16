@@ -30,6 +30,8 @@
 							},
 							valueAxis: {
 								min: 0,
+								majorUnit: 1000,
+								minorUnit: 1000,
 								title: {
 									text: "Milliseconds"
 								}
