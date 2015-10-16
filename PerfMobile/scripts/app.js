@@ -299,6 +299,16 @@
 					updateUI("Running APIS");
 
 					setTimeout(function() {
+
+					// Create Item API
+
+					requestURL = baseURL + "/api/erp/items";
+					apiName = "Item-Create";
+					recordSize = "1";
+
+					apiTestResults = createAPI(requestURL, requestType, apiName, recordSize, "yes", servername, pingTime, location, dateTime, apiTestResults);
+					deleteAPI();
+
 					for (i = 0; i < obj.apis.length; i++) {
 					    requestURL = baseURL + "/" + obj.apis[i].api;
 					    requestType = obj.apis[i].type;
@@ -322,7 +332,6 @@
 					updateResultsFile("api-test-results.json", apiTestResults);
 					console.log("----create-item-----");
 					}, 500);
-				// testCreateAPIEOS();
 					},
 										function(error){
 											console.log("FileDoesNotExist");
@@ -639,7 +648,8 @@
 		document.getElementById("test-results").innerHTML = updateMe;
 	}
 
-    function createAPI() {
+    function createAPI(api_url,reqType, apiName, records, finalAPI, servername, pingTime, location, dateTime, currentResults) {
+                    /*
                     var servername = "plli03.qad.com";
                     var tomcatPort = "40011";
                     var webapp = "qad-central";
@@ -647,7 +657,10 @@
                     var requestURL;
 
                     requestURL = baseURL + "/api/erp/items";
-                    apiName = "CREATE ItemID-MYADEMO-03";
+                    */
+
+                    // apiName = "CREATE ItemID-MYADEMO-03";
+                    var updateResult;
                     var jsonItem = {
                     "supplementaryMessages":[],
                     "items":[{
@@ -655,41 +668,8 @@
                     "isInstalledBase":false,"isISBUnitQuantity":false,"coverage":"","supplierWarranty":false,"isFieldReplaceable":false,"isInstallationCall":false,"isRepairable":false,"preventMaintDays":0,"preventMaintBOM":"","preventMaintRoute":"","repairBOM":"","repairRoute":"","repairSupplier":"","installationBOM":"","installationRoute":"","usageCode":"","serviceGroup":"","serviceCategory":"","meanTimeBtwFailure":0,"meanTimeToRepair":0,"mfgMTBtwFailure":0,"mfgMTToRepair":0,"stdTimeToRepair":0,"classification":"","weeksAvgCov":0,"weeksMaxCov":0,"weeksMinCov":0,"itemID":0,"description":"MYADEMO-03 Description","location":"","uri":"urn:be:com.qad.base.item.IItem:10USA.","GLCostTotal":{"GLCostDetails":[{"isPrimary":true,"lowerLevelCost":0,"isAddOn":false,"costTotal":0,"thisLevelCost":0,"element":"Burden","lastModifiedDate":null,"category":"Burden","dataOperation":"C","concurrencyHash":"","lastModifiedUser":"","customDate1":null,"customDate2":null,"customDate3":null,"customDate4":null,"customDate5":null,"customDecimal0":0,"customNote":"","customDecimal1":0,"customDecimal2":0,"customDecimal3":0,"customDecimal4":0,"customInteger0":0,"customInteger1":0,"customInteger2":0,"customInteger3":0,"customInteger4":0,"customLong0":"","customLong1":"","customShort0":"","customShort1":"","customShort2":"","customShort3":"","customShort4":"","customShort5":"","customShort6":"","customShort7":"","customShort8":"","customShort9":"","customShort10":"","customShort11":"","customShort12":"","customShort13":"","customShort14":"","customShort15":"","customShort16":"","customShort17":"","customShort18":"","customShort19":"","sequence":0,"uri":"urn:be:com.qad.base.item.IItem:10USA..10-100.Standard.Burden","QADC01":"","QADC02":"","QADT01":null,"QADD01":0},{"isPrimary":true,"lowerLevelCost":0,"isAddOn":false,"costTotal":0,"thisLevelCost":0,"element":"Labor","lastModifiedDate":null,"category":"Labor","dataOperation":"C","concurrencyHash":"","lastModifiedUser":"","customDate1":null,"customDate2":null,"customDate3":null,"customDate4":null,"customDate5":null,"customDecimal0":0,"customNote":"","customDecimal1":0,"customDecimal2":0,"customDecimal3":0,"customDecimal4":0,"customInteger0":0,"customInteger1":0,"customInteger2":0,"customInteger3":0,"customInteger4":0,"customLong0":"","customLong1":"","customShort0":"","customShort1":"","customShort2":"","customShort3":"","customShort4":"","customShort5":"","customShort6":"","customShort7":"","customShort8":"","customShort9":"","customShort10":"","customShort11":"","customShort12":"","customShort13":"","customShort14":"","customShort15":"","customShort16":"","customShort17":"","customShort18":"","customShort19":"","sequence":0,"uri":"urn:be:com.qad.base.item.IItem:10USA..10-100.Standard.Labor","QADC01":"","QADC02":"","QADT01":null,"QADD01":0},{"isPrimary":true,"lowerLevelCost":0,"isAddOn":false,"costTotal":0,"thisLevelCost":0,"element":"Material","lastModifiedDate":null,"category":"Material","dataOperation":"C","concurrencyHash":"","lastModifiedUser":"","customDate1":null,"customDate2":null,"customDate3":null,"customDate4":null,"customDate5":null,"customDecimal0":0,"customNote":"","customDecimal1":0,"customDecimal2":0,"customDecimal3":0,"customDecimal4":0,"customInteger0":0,"customInteger1":0,"customInteger2":0,"customInteger3":0,"customInteger4":0,"customLong0":"","customLong1":"","customShort0":"","customShort1":"","customShort2":"","customShort3":"","customShort4":"","customShort5":"","customShort6":"","customShort7":"","customShort8":"","customShort9":"","customShort10":"","customShort11":"","customShort12":"","customShort13":"","customShort14":"","customShort15":"","customShort16":"","customShort17":"","customShort18":"","customShort19":"","sequence":0,"uri":"urn:be:com.qad.base.item.IItem:10USA..10-100.Standard.Material","QADC01":"","QADC02":"","QADT01":null,"QADD01":0},{"isPrimary":true,"lowerLevelCost":0,"isAddOn":false,"costTotal":0,"thisLevelCost":0,"element":"Overhead","lastModifiedDate":null,"category":"Overhead","dataOperation":"C","concurrencyHash":"","lastModifiedUser":"","customDate1":null,"customDate2":null,"customDate3":null,"customDate4":null,"customDate5":null,"customDecimal0":0,"customNote":"","customDecimal1":0,"customDecimal2":0,"customDecimal3":0,"customDecimal4":0,"customInteger0":0,"customInteger1":0,"customInteger2":0,"customInteger3":0,"customInteger4":0,"customLong0":"","customLong1":"","customShort0":"","customShort1":"","customShort2":"","customShort3":"","customShort4":"","customShort5":"","customShort6":"","customShort7":"","customShort8":"","customShort9":"","customShort10":"","customShort11":"","customShort12":"","customShort13":"","customShort14":"","customShort15":"","customShort16":"","customShort17":"","customShort18":"","customShort19":"","sequence":0,"uri":"urn:be:com.qad.base.item.IItem:10USA..10-100.Standard.Overhead","QADC01":"","QADC02":"","QADT01":null,"QADD01":0},{"isPrimary":true,"lowerLevelCost":0,"isAddOn":false,"costTotal":0,"thisLevelCost":0,"element":"Subcontr","lastModifiedDate":null,"category":"Subcontract","dataOperation":"C","concurrencyHash":"","lastModifiedUser":"","customDate1":null,"customDate2":null,"customDate3":null,"customDate4":null,"customDate5":null,"customDecimal0":0,"customNote":"","customDecimal1":0,"customDecimal2":0,"customDecimal3":0,"customDecimal4":0,"customInteger0":0,"customInteger1":0,"customInteger2":0,"customInteger3":0,"customInteger4":0,"customLong0":"","customLong1":"","customShort0":"","customShort1":"","customShort2":"","customShort3":"","customShort4":"","customShort5":"","customShort6":"","customShort7":"","customShort8":"","customShort9":"","customShort10":"","customShort11":"","customShort12":"","customShort13":"","customShort14":"","customShort15":"","customShort16":"","customShort17":"","customShort18":"","customShort19":"","sequence":0,"uri":"urn:be:com.qad.base.item.IItem:10USA..10-100.Standard.Subcontr","QADC01":"","QADC02":"","QADT01":null,"QADD01":0}],"lowerLevelLabor":0,"thisLevelOverhead":0,"lowerLevelOverhead":0,"thisLevelBurden":0,"lowerLevelBurden":0,"thisLevelSubcontract":0,"lowerLevelSubcontract":0,"thisLevelTotal":0,"lowerLevelTotal":0,"costTotal":0,"costSetMethod":"STD","costSet":"Standard","dateUpdated":"2015-10-13T07:00:00.000Z","thisLevelMaterial":0,"lowerLevelMaterial":0,"thisLevelLabor":0,"lastModifiedDate":null,"siteCode":"10-100","dataOperation":"C","concurrencyHash":"","lastModifiedUser":"","customDate1":null,"customDate2":null,"customDate3":null,"customDate4":null,"customDate5":null,"customDecimal0":0,"customNote":"","customDecimal1":0,"customDecimal2":0,"customDecimal3":0,"customDecimal4":0,"customInteger0":0,"customInteger1":0,"customInteger2":0,"customInteger3":0,"customInteger4":0,"customLong0":"","customLong1":"","customShort0":"","customShort1":"","customShort2":"","customShort3":"","customShort4":"","customShort5":"","customShort6":"","customShort7":"","customShort8":"","customShort9":"","customShort10":"","customShort11":"","customShort12":"","customShort13":"","customShort14":"","customShort15":"","customShort16":"","customShort17":"","customShort18":"","customShort19":"","uri":"urn:be:com.qad.base.item.IItem:10USA..10-100.Standard","GLCostSourceSite":"10-100","QADC01":"","QADC02":"","QADT01":null,"QADD01":0},"QADC01":"","QADC02":"","QADT01":null,"QADD01":0,"ABCClass":"A","POReceiptStatus":"","WOReceiptStatus":"","POSite":"10-100","ATPEnforcement":"NONE","ATPHorizon":0,"EMTType":"NON-EMT","BOMFormula":"","IDQuantity":0
                     }]
                     };
-                    sendAPIPOSTJQuery(requestURL, apiName, jsonItem);
-                    /*
-                    requestURL = baseURL + "/api/erp/countries";
-                    apiName = "Country-MYA";
-
-                    var jsonCountry = {
-                            "supplementaryMessages" : [ ],
-                            "countrys" : [{
-                                        "countryVatFormats" : [ ],
-                                        "currencyID" : 44951,
-                                        "isActive" : true,
-                                        "countryCode" : "MYA",
-                                        "commentIndex" : 0,
-                                        "dataOperation" : "",
-                                        "lastModifiedUser" : "mfg",
-                                        "currencyCode" : "MAD",
-                                        "countryType" : "",
-                                        "isNAFTACountry" : false,
-                                        "isDEACountry" : false,
-                                        "isGATTCountry" : false,
-                                        "fiscalCountryCode" : "",
-                                        "intrastatCurrencyCode" : "",
-                                        "countryDescription" : "MYA-TEST",
-                                        "postalFormat" : "Before",
-                                        "isEUCountry" : false,
-                                        "alternateCode" : "MYA",
-                                        "countryGroup" : "",
-                                        "uri" : "urn:be:com.qad.base.address.ICountry:MYA",
-                                        "QADD01" : 0
-                                    }
-                            ]
-
-                        }
-
-                        sendAPIPOSTJQuery(requestURL, apiName, jsonCountry); */
+                    updateResult = sendAPIPOSTJQuery(api_url,reqType, apiName, records, finalAPI, servername, pingTime, location, dateTime, currentResults, jsonItem);
+                    return updateResult;
 
     }
 
@@ -707,11 +687,11 @@
 
     }
 
-    function sendAPIPOSTJQuery(api_url, apiName, jsonString) {
+    function sendAPIPOSTJQuery(api_url,reqType, apiName, records, finalAPI, servername, pingTime, location, dateTime, currentResults, jsonString) {
         var currentTime = +new Date();
         var outputCSV;
-        //console.log("jsonString: " + JSON.stringify(jsonString));
-        document.getElementById("test-results").innerHTML = "TEST-CREATE: " + apiName;
+        var updateResult;
+        updateResult = currentResults;
         $.ajax
         ({
              type: "POST",
@@ -724,6 +704,7 @@
              contentType: 'application/json;charset=UTF-8',
              complete: function(xhr, status) {
                  console.log("Status: " + status);
+                 dateTime = xhr.getResponseHeader("Date");
              },
              beforeSend: function(xhr) {
                  xhr.setRequestHeader("Accept-Language", "en-US,en;q=0.8");
@@ -732,24 +713,19 @@
                  xhr.setRequestHeader("Cache-Control", "max-age=0");
                  xhr.setRequestHeader('Authorization', 'Basic bWZnQHFhZC5jb206');
              },
-             success: function () {
+             success: function (data, status, xhr) {
                  var endTime = +new Date();
                  var timeDiff = endTime - currentTime;
-                 outputCSV = "API,ResponseTime(ms) <br>" + apiName + "," + timeDiff.toString();
-                 console.log('"test-results": {');
-                 console.log('"api" : "' + apiName + '",');
-                 console.log('"duration": ' + timeDiff + ',');
-                 console.log('"records" : 0,');
-                 console.log('"size" : 0,');
-                 console.log('}');
-                 document.getElementById("test-results").innerHTML = "CREATE API-Running-Complete" + outputCSV;
-
+                 updateResult = updateResult + '{' + '"ping" : "' + pingTime + '",' + '"location" : "' + location + '",' + '"server" : "' + servername + '",' + '"datetime" : "' + xhr.getResponseHeader("Date") + '",' + '"api" : "' + apiName + '",' + '"duration": ' + timeDiff + ',' + '"records" :' + records + ',' + '"size" : 0';
+                 updateResult = updateResult + '},';
+                 console.log(updateResult);
                  console.log(apiName + " " + "Create Done!");
              },
              error: function() {
                  console.log(apiName + " " + "Create Failed!");
              }
          });
+         return updateResult;
     }
 
     function sendAPIDELETEJQuery(api_url, apiName) {
