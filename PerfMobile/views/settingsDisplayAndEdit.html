@@ -27,11 +27,24 @@ readTextFromFile(originalfileName);
 var initialData;
 var currentData;
 
+function ifNoFile()
+{
+	var json = '{"serverinfo": {"username": "mfg@qad.com","password": "","server": "plli03.qad.com","tomcatport": "40011","tomcatwebapp": "qad-central"},';
+	json += '"apis": [{"type": "POST","name": "Login","api": "j_spring_security_check?j_username=mfg@qad.com&j_password="},';
+	json += '{"type": "GET","name": "Menus","api": "api/webshell/menu"},';
+	json += '{"type": "GET","name": "Sales-100","api": "api/qracore/browses?browseId=mfg:so803&page=1&pageSize=100"},';
+	json += '{"type": "GET","name": "Sales-10","api": "api/qracore/browses?browseId=mfg:so803&page=1&pageSize=10"},';
+	json += '{"type": "GET","name": "Item-100","api": "api/qracore/browses?browseId=mfg:gp340&page=1&pageSize=100"},';
+	json += '{"type": "GET","name": "Item-10","api": "api/qracore/browses?browseId=mfg:gp340&page=1&pageSize=10"},';
+	json += '{"type": "GET","name": "Item-Count","api": "api/qracore/browses/totalCount/?browseId=mfg:gp340"}]}';
+	writeToFile(originalfileName, json);
+}
+
 function readTextFromFile(filename)
 	{
+		fileSystemTest = new FileSystemHelper();		
 		counter = 1;
 		fileSystemHelper = new FileSystemHelper();
-		console.log("file read success");
 		fileSystemHelper.readTextFromFile(filename, function(result){
 			initialData = JSON.parse(result);
 			var username = initialData.serverinfo.username;
@@ -64,6 +77,7 @@ function readTextFromFile(filename)
 		}, 
 		function(error){
 			console.log("file failed to read");
+			ifNoFile();			
 		});
 	};
 
@@ -96,7 +110,6 @@ function writeToFile(filename, jsonSettings){
 
 function generateNewSettings(){
 	var itterationCounter = 0;
-	originalfileName = "application-configuration.json";
 	var serverinfo = '{ "serverinfo": { "username": "' + document.getElementById("username").value + '", ';
 	serverinfo += '"password" : "' + document.getElementById("password").value + '", ';
 	serverinfo += '"server" : "' + document.getElementById("server").value + '", ';
@@ -181,7 +194,7 @@ function generateNewSettings(){
 			<div data-role="tabstrip">
 				<a href="views/runTest.html" data-icon="home">RunTest</a>
 				<a href="views/results.html" data-icon="globe">Results</a>
-				<a href="views/settings.html" data-icon="settings">Settings</a>
+				<a href="views/settingsDisplayAndEdit.html" data-icon="settings">Settings</a>
 			</div>
 		<div>
 	</div>	
