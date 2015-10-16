@@ -249,29 +249,13 @@
 				},
 
                 signInButton: function (e) {
-                    // var username = document.getElementById("username").value;
-                    // var password = document.getElementById("password").value;
-                    //var username = "mfg@qad.com";
-                    //var password = "";
-                    //var servername = "plli03.qad.com";
-                    //var tomcatPort = "40011";
-                    //var webapp = "qad-central";
-                    //var baseURL = "https://" + servername + ":" + tomcatPort + "/" + webapp;
-                    // var apiName = "Login";
-
-
-                    // This section needs to be replaced by reading the APIs to run from a JSON file
-					// jQuery to Read the JSON File for the APIs
-
 					var myResult;
-
+					console.log("Read Configuration File");
 					readConfigFile = new FileSystemHelper();
-					// readConfigFile.readTextFromFile("application-configuration.json",function(result){var parseResultsJSON = JSON.parse(result);},function(error){});
-
-					//$.when( $.ajax( "https://bs1.cdn.telerik.com/v1/InJzMMjAJq3F0qZ8/e826ec40-7260-11e5-a00b-c3dfcd47bf37" )).done(function(result) {
 					readConfigFile.readTextFromFile("application-configuration.json",function(result){
-
-                        myResult = result;
+                    console.log("Launch APIs");
+                    console.log("---------------------------------------");
+                    myResult = result;
 
                     obj = JSON.parse(myResult);
 
@@ -292,20 +276,17 @@
                     var location = "Limerick, Ireland";
                     var dateTime = "14 Oct 2015 11:19:00";
 
-					requestURL = baseURL + "/" + "resources/qad/webshell/style/img/homepage.png";
+					// getPing(requestURL,"GET");
 					pingTime = Math.floor(Math.random()*(230-160+1)+160);
 
-					// getPing(requestURL,"GET");
-					updateUI("Running APIS");
+     				updateUI("Running APIS");
 
 					setTimeout(function() {
 
 					// Create Item API
-
 					requestURL = baseURL + "/api/erp/items";
 					apiName = "Item-Create";
 					recordSize = "1";
-
 					apiTestResults = createAPI(requestURL, requestType, apiName, recordSize, "yes", servername, pingTime, location, dateTime, apiTestResults);
 
 					// Delete Item API
@@ -318,7 +299,6 @@
 					    requestURL = baseURL + "/" + obj.apis[i].api;
 					    requestType = obj.apis[i].type;
 					    apiName = obj.apis[i].name;
-					    //sendAPIRequest(requestURL, requestType, apiName, recordSize);
 					    if(i == (obj.apis.length - 1)){
 							apiTestResults = sendAPIRequestJQuery(requestURL, requestType, apiName, recordSize, "yes", servername, pingTime, location, dateTime, apiTestResults);
 						}
@@ -327,37 +307,17 @@
 						}
 					}
 
-
-
                     // Set JSON Headers and Footers
                     apiTestResults = "[" + apiTestResults + "]";
-                    console.log(apiTestResults);
-					// Store the results
-					//writeResultsFile("api-test-results.json", apiTestResults);
+//                  console.log(apiTestResults);
+					console.log("---------------------------------------");
+					console.log("Create Results File");
 					updateResultsFile("api-test-results.json", apiTestResults);
-					console.log("----create-item-----");
 					}, 500);
 					},
 										function(error){
 											console.log("FileDoesNotExist");
-											var initConfig = '{"serverinfo": {"username": "mfg@qad.com","password": "","server": "plli03.qad.com","tomcatport": "40011","tomcatwebapp": "qad-central"},';
-											document.getElementById("test-results").innerHTML = "ERROR <BR> No Server or APIS configured <BR> Use Settings to Configure Application";
-
-											initConfig = initConfig + '"apis": [';
-											initConfig = initConfig + '{"type": "POST","name": "Login","api": "j_spring_security_check?j_username=mfg@qad.com&j_password="},{"type": "GET","name": "Menus","api": "api/webshell/menu"},';
-											initConfig = initConfig + '{"type": "GET","name": "Sales-100","api": "api/qracore/browses?browseId=mfg:so803&page=1&pageSize=100"},';
-											initConfig = initConfig + '{"type": "GET","name": "Sales-10","api": "api/qracore/browses?browseId=mfg:so803&page=1&pageSize=10"},';
-											initConfig = initConfig + '{"type": "GET","name": "Item-100","api": "api/qracore/browses?browseId=mfg:gp340&page=1&pageSize=100"},';
-											initConfig = initConfig + '{"type": "GET","name": "Item-10","api": "api/qracore/browses?browseId=mfg:gp340&page=1&pageSize=10"},';
-											initConfig = initConfig + '{"type": "GET","name": "Item-Count","api": "api/qracore/browses/totalCount/?browseId=mfg:gp340"}';
-											initConfig = initConfig + ']';
-											console.log("--------------------------");
-											console.log(initConfig);
-
 										});
-										// create and delete APIs
-									   // createAPI();
-                                       // deleteAPI();
 				}
             }
         }
@@ -402,30 +362,21 @@
 		fileSystemHelper = new FileSystemHelper();
 		fileSystemHelper.readTextFromFile(filename,
 			function(result){
-				console.log("old-results");
-				console.log(result);
-				console.log("latest results");
-				console.log(latestResults);
 				var parseResultsJSON = JSON.parse(result);
-
-				// parseResultsJSON.push({ping : "170", location : "Limerick", server : "plli03new.qad.com", datetime : "now", api : "test", duration : "150", records : "0", size : "0"});
 				var lastestJSONResults = JSON.parse(latestResults);
+
 				// Now we need to merge the results
 				for (i = 0; i < lastestJSONResults.length; i++) {
 					parseResultsJSON.push({ping : lastestJSONResults[i].ping, location : lastestJSONResults[i].location, server : lastestJSONResults[i].server, datetime : lastestJSONResults[i].datetime, api : lastestJSONResults[i].api, duration : lastestJSONResults[i].duration, records : lastestJSONResults[i].records, size : lastestJSONResults[i].size});
 				}
 
-				console.log("-----MergedData------");
 				var mergedResults = JSON.stringify(parseResultsJSON);
-				console.log(mergedResults);
+
+//				console.log(mergedResults);
 
 				// Write the latest results file
-				fileSystemHelper.writeLine(filename, mergedResults, function(result){console.log("file created");},function(error){console.log("file create failed");} );
-				fileSystemHelper.writeLine(storeLatestResults, latestResults, function(result){console.log("file created");updateUI("");app.navigate("views/results.html");;},function(error){console.log("file create failed");} );
-
-				// window.location.href = "views/results.html";
-				//app.navigate("#results-screen");
-
+				fileSystemHelper.writeLine(filename, mergedResults, function(result){},function(error){console.log("file create failed");} );
+				fileSystemHelper.writeLine(storeLatestResults, latestResults, function(result){console.log("Results File Create");console.log("Display Results");updateUI("");app.navigate("views/results.html");;},function(error){console.log("file create failed");} );
 			},
 			function(error){
 				console.log("read file failed");
@@ -466,10 +417,6 @@
     }
 
     function sendAPIRequestJQuery(api_url,reqType, apiName, records, finalAPI, servername, pingTime, location, dateTime, currentResults){
-
-        //xhttp.setRequestHeader('Authorization','Basic bWZnQHFhZC5jb206');
-
-
 		var currentTime = +new Date();
 		var outputCSV;
 		var updateResult = currentResults;
@@ -478,26 +425,13 @@
 			var timeDiff = endTime - currentTime;
 			outputCSV = "API,ResponseTime(ms) <br>" + apiName + "," + timeDiff.toString();
 			updateResult = updateResult + '{' + '"ping" : "' + pingTime + '",' + '"location" : "' + location + '",' + '"server" : "' + servername + '",' + '"datetime" : "' + xhr.getResponseHeader("Date") + '",' + '"api" : "' + apiName + '",' + '"duration": ' + timeDiff + ',' + '"records" :' + records + ',' + '"size" : 0';
-			console.log('{');
-			console.log('"ping" : "' + pingTime + '",');
-			console.log('"location" : "' + location + '",');
-			console.log('"server" : "' + servername + '",');
-			console.log('"datetime" : "' + dateTime + '",');
-			console.log('"api" : "' + apiName + '",');
-			console.log('"duration": ' + timeDiff + ',' );
-			console.log('"records" :' + records + ',');
-			console.log('"size" : 0');
-			console.log(xhr.getAllResponseHeaders());
-			console.log(xhr.getResponseHeader("Date"));
+			console.log("API: " + apiName + " Complete In: " + timeDiff + " ms");
 			if(finalAPI == "yes"){
 				updateResult = updateResult + '}';
-				console.log('}');
 				}
 			else{
-				console.log('},');
 				updateResult = updateResult + '},';
 				}
-			// document.getElementById("test-results").innerHTML = "API-Running-Complete" + outputCSV;
 			});
 			return updateResult;
 	}
@@ -654,17 +588,6 @@
 	}
 
     function createAPI(api_url,reqType, apiName, records, finalAPI, servername, pingTime, location, dateTime, currentResults) {
-                    /*
-                    var servername = "plli03.qad.com";
-                    var tomcatPort = "40011";
-                    var webapp = "qad-central";
-                    var baseURL = "https://" + servername + ":" + tomcatPort + "/" + webapp;
-                    var requestURL;
-
-                    requestURL = baseURL + "/api/erp/items";
-                    */
-
-                    // apiName = "CREATE ItemID-MYADEMO-03";
                     var updateResult;
                     var jsonItem = {
                     "supplementaryMessages":[],
@@ -679,16 +602,6 @@
     }
 
     function deleteAPI(api_url,reqType, apiName, records, finalAPI, servername, pingTime, location, dateTime, currentResults) {
-		/*
-                    var servername = "plli03.qad.com";
-                    var tomcatPort = "40011";
-                    var webapp = "qad-central";
-                    var baseURL = "https://" + servername + ":" + tomcatPort + "/" + webapp;
-                    var requestURL;
-
-                    requestURL = baseURL + "/api/erp/items?domainCode=10USA&itemCode=MYADEMO-03";
-                    apiName = "DELETE-ItemID-MYADEMO-03";
-        */
         			var updateResult;
                     updateResult = sendAPIDELETEJQuery(api_url,reqType, apiName, records, finalAPI, servername, pingTime, location, dateTime, currentResults);
                     return updateResult;
@@ -711,7 +624,6 @@
              data: JSON.stringify(jsonString),
              contentType: 'application/json;charset=UTF-8',
              complete: function(xhr, status) {
-                 console.log("Status: " + status);
                  dateTime = xhr.getResponseHeader("Date");
              },
              beforeSend: function(xhr) {
@@ -726,8 +638,7 @@
                  var timeDiff = endTime - currentTime;
                  updateResult = updateResult + '{' + '"ping" : "' + pingTime + '",' + '"location" : "' + location + '",' + '"server" : "' + servername + '",' + '"datetime" : "' + xhr.getResponseHeader("Date") + '",' + '"api" : "' + apiName + '",' + '"duration": ' + timeDiff + ',' + '"records" :' + records + ',' + '"size" : 0';
                  updateResult = updateResult + '},';
-                 console.log(updateResult);
-                 console.log(apiName + " " + "Create Done!");
+                 console.log("API: " + apiName + " Complete In: " + timeDiff + " ms");
              },
              error: function() {
                  console.log(apiName + " " + "Create Failed!");
@@ -749,7 +660,6 @@
              async: false,
              contentType: "",
              complete: function(xhr, status) {
-                 console.log("Status: " + status);
              },
              beforeSend: function(xhr) {
                  xhr.setRequestHeader("Accept-Language", "en-US,en;q=0.8");
@@ -764,7 +674,7 @@
                  var timeDiff = endTime - currentTime;
                  updateResult = updateResult + '{' + '"ping" : "' + pingTime + '",' + '"location" : "' + location + '",' + '"server" : "' + servername + '",' + '"datetime" : "' + xhr.getResponseHeader("Date") + '",' + '"api" : "' + apiName + '",' + '"duration": ' + timeDiff + ',' + '"records" :' + records + ',' + '"size" : 0';
                  updateResult = updateResult + '},';
-                 console.log(apiName + " " + "Delete Done!");
+                 console.log("API: " + apiName + " Complete In: " + timeDiff + " ms");
              },
              error: function() {
                  console.log(apiName + " " + "Delete Failed!");
