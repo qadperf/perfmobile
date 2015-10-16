@@ -307,7 +307,12 @@
 					recordSize = "1";
 
 					apiTestResults = createAPI(requestURL, requestType, apiName, recordSize, "yes", servername, pingTime, location, dateTime, apiTestResults);
-					deleteAPI();
+
+					// Delete Item API
+					requestURL = baseURL + "/api/erp/items?domainCode=10USA&itemCode=MYADEMO-03";
+					apiName = "Item-Delete";
+					recordSize = "1";
+					apiTestResults = deleteAPI(requestURL,requestType, apiName, recordSize, "no", servername, pingTime, location, dateTime, apiTestResults);
 
 					for (i = 0; i < obj.apis.length; i++) {
 					    requestURL = baseURL + "/" + obj.apis[i].api;
@@ -673,7 +678,8 @@
 
     }
 
-    function deleteAPI() {
+    function deleteAPI(api_url,reqType, apiName, records, finalAPI, servername, pingTime, location, dateTime, currentResults) {
+		/*
                     var servername = "plli03.qad.com";
                     var tomcatPort = "40011";
                     var webapp = "qad-central";
@@ -682,8 +688,10 @@
 
                     requestURL = baseURL + "/api/erp/items?domainCode=10USA&itemCode=MYADEMO-03";
                     apiName = "DELETE-ItemID-MYADEMO-03";
-
-                    sendAPIDELETEJQuery(requestURL, apiName);
+        */
+        			var updateResult;
+                    updateResult = sendAPIDELETEJQuery(api_url,reqType, apiName, records, finalAPI, servername, pingTime, location, dateTime, currentResults);
+                    return updateResult;
 
     }
 
@@ -728,10 +736,11 @@
          return updateResult;
     }
 
-    function sendAPIDELETEJQuery(api_url, apiName) {
+    function sendAPIDELETEJQuery(api_url,reqType, apiName, records, finalAPI, servername, pingTime, location, dateTime, currentResults) {
         var currentTime = +new Date();
         var outputCSV;
-        document.getElementById("test-results").innerHTML = "TEST-DELETE: " + apiName;
+        var updateResult;
+        updateResult = currentResults;
         $.ajax
         ({
              type: "DELETE",
@@ -750,23 +759,17 @@
                  xhr.setRequestHeader('Authorization', 'Basic bWZnQHFhZC5jb206');
              },
 
-             success: function () {
+             success: function (data, status, xhr) {
                  var endTime = +new Date();
                  var timeDiff = endTime - currentTime;
-                 outputCSV = "API,ResponseTime(ms) <br>" + apiName + "," + timeDiff.toString();
-                 console.log('"test-results": {');
-                 console.log('"api" : "' + apiName + '",');
-                 console.log('"duration": ' + timeDiff + ',');
-                 console.log('"records" : 0,');
-                 console.log('"size" : 0,');
-                 console.log('}');
-                 document.getElementById("test-results").innerHTML = "DELETE API-Running-Complete" + outputCSV;
-
+                 updateResult = updateResult + '{' + '"ping" : "' + pingTime + '",' + '"location" : "' + location + '",' + '"server" : "' + servername + '",' + '"datetime" : "' + xhr.getResponseHeader("Date") + '",' + '"api" : "' + apiName + '",' + '"duration": ' + timeDiff + ',' + '"records" :' + records + ',' + '"size" : 0';
+                 updateResult = updateResult + '},';
                  console.log(apiName + " " + "Delete Done!");
              },
              error: function() {
                  console.log(apiName + " " + "Delete Failed!");
              }
          });
+         return updateResult;
     }
 }());
