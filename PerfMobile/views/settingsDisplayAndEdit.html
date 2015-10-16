@@ -20,53 +20,16 @@
 <body>
 
 <script>
-var originalfileName = "application-configuration-APPEND.json"; //need to edit this so it appends and not overwrites
+var originalfileName = "application-configuration.json"; //need to edit this so it appends and not overwrites
 var counter = 1;
 var limit = 40;
 readTextFromFile(originalfileName);
 var initialData;
 var currentData;
-appendData();
-
-function appendData()
-{
-	window.scrollTo(0, 0);
-	$("#appendSettings").show();
-	$("#newSettings").hide();
-	$("#btnAppend").show();
-	$("#btnSave").hide();
-	$("#btnNewServer").hide();
-	$("#dynamicApi").show();
-	$("#dynamicInput").show();
-	
-}
-
-function newData()
-{
-	window.scrollTo(0, 0);
-	$("#appendSettings").hide();
-	$("#newSettings").show();
-	$("#btnAppend").hide();
-	$("#btnSave").show();
-	$("#btnNewServer").hide();
-	$("#dynamicApi").show();
-	$("#dynamicInput").show();
-}
-
-function newServer()
-{
-	window.scrollTo(0, 0);
-	$("#appendSettings").hide();
-	$("#newSettings").show();
-	$("#btnAppend").hide();
-	$("#btnSave").hide();
-	$("#btnNewServer").show();
-	$("#dynamicApi").hide();
-	$("#dynamicInput").hide();
-}
 
 function readTextFromFile(filename)
 	{
+		counter = 1;
 		fileSystemHelper = new FileSystemHelper();
 		console.log("file read success");
 		fileSystemHelper.readTextFromFile(filename, function(result){
@@ -86,14 +49,14 @@ function readTextFromFile(filename)
 			var webapp = initialData.serverinfo.tomcatwebapp;
 			document.getElementById("tomcatwebapp").value = webapp;
 			document.getElementById("staticTomcatWebapp").innerHTML = webapp;
-			//return result;
+
 			var out = "";
 			for (i = 0; i < initialData.apis.length; i++) {
 			out += "<fieldset>"
-			out += '<legend>Running API ' + counter + '</legend>';
-			out += '<div><label>Type: <input type="text" name="TypeInput[]" id="type' + counter + '" value="' + initialData.apis[i].type + '"></label></div>';
-			out += '<div><label>API Name: <input type="text" name="ApiNameInput[]" id="apiname' + counter + '" value="' + initialData.apis[i].name + '"></label></div>';
-			out += '<div><label>API: <input type="text" name="ApiInput[]" id="api' + counter + '" value="' + initialData.apis[i].api + '"></label></div>';
+			out += '<legend>Running API ' + (i + 1) + '</legend>';
+			out += '<div><label>Type: <input type="text" name="TypeInput[]" id="type' + (i + 1) + '" value="' + initialData.apis[i].type + '"></label></div>';
+			out += '<div><label>API Name: <input type="text" name="ApiNameInput[]" id="apiname' + (i + 1) + '" value="' + initialData.apis[i].name + '"></label></div>';
+			out += '<div><label>API: <input type="text" name="ApiInput[]" id="api' + (i + 1) + '" value="' + initialData.apis[i].api + '"></label></div>';
 			counter++;
 			out += "</fieldset>"
 			}			
@@ -110,7 +73,7 @@ function addInput(divName){
      }
      else {
           var newdiv = document.createElement('fieldset');
-		  var divString = "<legend>Running API " + (counter + 1) + '</legend><div><label>Type: <input type="text" name="TypeInput[]" id="type' + (counter + 1) + '"></label></div><div><label>API Name: <input type="text" name="ApiNameInput[]" id="apiname' + (counter + 1) + '"></label></div><div><label>API: <input type="text" name="ApiInput[]" id="api' + (counter + 1) +'"></label></div>';
+		  var divString = "<legend>Running API " + (counter) + '</legend><div><label>Type: <input type="text" name="TypeInput[]" id="type' + (counter) + '"></label></div><div><label>API Name: <input type="text" name="ApiNameInput[]" id="apiname' + (counter) + '"></label></div><div><label>API: <input type="text" name="ApiInput[]" id="api' + (counter) +'"></label></div>';
           newdiv.innerHTML = divString;
           document.getElementById(divName).appendChild(newdiv);
           counter++;
@@ -131,92 +94,36 @@ function writeToFile(filename, jsonSettings){
 		});
 	}
 
-function generateNewServer(){
-	originalfileName = "application-configuration-SERVER.json";
-	var serverinfo = '{ "serverinfo": { "username": "' + document.getElementById("username").value + '", ';
-	serverinfo += '"password" : "' + document.getElementById("password").value + '", ';
-	serverinfo += '"server" : "' + document.getElementById("server").value + '", ';
-	serverinfo += '"tomcatport" : "' + document.getElementById("tomcatport").value + '", ';
-	serverinfo += '"tomcatwebapp" : "' + document.getElementById("tomcatwebapp").value + '" }';
-	var api = ', "apis": [ ';
-	for (i = 0; i < initialData.apis.length; i++) 
-	{
-		api += '{ "type" : "' + initialData.apis[i].type + '", ';
-		api += ' "name" : "' + initialData.apis[i].name + '", ';
-		api += ' "api" : "' + initialData.apis[i].api + '"}';
-		if (i < counter - 1)
-		{
-			api += ', ';
-		}
-
-	}
-	api += '] }';
-	
-	serverinfo = serverinfo + api;
-	writeToFile(originalfileName, serverinfo);
-}
-
-function updateSettings(){
-	originalfileName = "application-configuration-APPEND.json";
-	var serverinfo = '{ "serverinfo": { "username": "' + initialData.serverinfo.username + '", ';
-	serverinfo += '"password" : "' + initialData.serverinfo.password + '", ';
-	serverinfo += '"server" : "' + initialData.serverinfo.server + '", ';
-	serverinfo += '"tomcatport" : "' + initialData.serverinfo.tomcatport + '", ';
-	serverinfo += '"tomcatwebapp" : "' + initialData.serverinfo.tomcatwebapp + '" }';
-	var api = ', "apis": [ ';
-	for (i = 0; i < initialData.apis.length; i++) 
-	{
-		api += '{ "type" : "' + initialData.apis[i].type + '", ';
-		api += ' "name" : "' + initialData.apis[i].name + '", ';
-		api += ' "api" : "' + initialData.apis[i].api + '"}';
-		api += ', ';
-
-	}
-	for (i = 0; i < counter; i++) 
-	{
-		var t = "type"+(i+1);
-		var n = "apiname"+(i+1);
-		var a = "api"+(i+1);
-		api += '{ "type" : "' + document.getElementById(t).value + '", ';
-		api += ' "name" : "' + document.getElementById(n).value + '", ';
-		api += ' "api" : "' + document.getElementById(a).value + '"}';
-		if (i < counter - 1)
-		{
-			api += ', ';
-		}
-	}
-	api += '] }';
-	
-	serverinfo = serverinfo + api;
-	writeToFile(originalfileName, serverinfo);
-	
-}
-
 function generateNewSettings(){
-	originalfileName = "NOT-application-configuration.json";
+	var itterationCounter = 0;
+	originalfileName = "application-configuration.json";
 	var serverinfo = '{ "serverinfo": { "username": "' + document.getElementById("username").value + '", ';
 	serverinfo += '"password" : "' + document.getElementById("password").value + '", ';
 	serverinfo += '"server" : "' + document.getElementById("server").value + '", ';
 	serverinfo += '"tomcatport" : "' + document.getElementById("tomcatport").value + '", ';
 	serverinfo += '"tomcatwebapp" : "' + document.getElementById("tomcatwebapp").value + '" }';
 	var api = ', "apis": [ ';
-	for (i = 0; i < counter; i++) 
+	for (itterationCounter = 0; itterationCounter < counter; itterationCounter++) 
 	{
-		var t = "type"+(i+1);
-		var n = "apiname"+(i+1);
-		var a = "api"+(i+1);
-		api += '{ "type" : "' + document.getElementById(t).value + '", ';
-		api += ' "name" : "' + document.getElementById(n).value + '", ';
-		api += ' "api" : "' + document.getElementById(a).value + '"}';
-		if (i < counter - 1)
+		var t = "type"+(itterationCounter+1);
+		var n = "apiname"+(itterationCounter+1);
+		var a = "api"+(itterationCounter+1);
+		if (document.getElementById(t) != null && document.getElementById(t).value != "" && document.getElementById(n) != null && document.getElementById(n).value != "" && document.getElementById(a) != null && document.getElementById(a).value != "")
 		{
-			api += ', ';
+			if (itterationCounter >= 1)
+			{
+				api += ',';
+			}
+			api += '{ "type" : "' + document.getElementById(t).value + '", ';
+			api += ' "name" : "' + document.getElementById(n).value + '", ';
+			api += ' "api" : "' + document.getElementById(a).value + '"}';
 		}
 	}
 	api += '] }';
 	
 	serverinfo = serverinfo + api;
-	writeToFile(originalfileName, serverinfo);	
+	writeToFile(originalfileName, serverinfo);
+	itterationCounter = 0;
 }
 	
 </script>
@@ -226,12 +133,12 @@ function generateNewSettings(){
         <div id="navbarplain" data-role="navbar">
 			<img id="corplogo" src="../styles/images/QAD_Logo_Corp.png" data-align="left"
 			style="width: 50px; height: 45px; margin-top: 0.2em"/>
-            <a id="backToSettings" data-role="button" href="views/settings.html" data-align="right">Back</a>
+			<a data-role="button" id="btnSave" onClick="generateNewSettings();" href="views/settingsDisplayAndEdit.html" data-align="right">Update</a>
             <span data-role="view-title"></span>
         </div>
     </header>
 		<form method="POST" id="settingsForm">
-			<fieldset id="newSettings" style="display:none;">
+			<fieldset id="newSettings">
 				<legend>Server Information</legend>
 				<div><label for="username">Username:</label></div>
 				<input type="text" name="username" id="username"><br>
@@ -248,7 +155,7 @@ function generateNewSettings(){
 				<div><label for="tomcatwebapp">Tomcat WebApp:</label></div>
 				<input type="text" name="tomcatwebapp" id="tomcatwebapp"><br>
 			</fieldset>
-			<fieldset id="appendSettings">
+			<fieldset id="appendSettings" style="display:none;">
 				<legend>Server Information</legend>
 				<div><label for="staticUserName">Username:</label><div id="staticUserName"></div>
 				
@@ -267,15 +174,10 @@ function generateNewSettings(){
 
 			</div>
 			
-			<input type="button" id="dynamicApi"value="Add another API" onClick="addInput('dynamicInput');">
-			<input type="button" id="btnNewServer" value="Add Server" onClick="generateNewServer();" style="display:none;">
-			<input type="button" id="btnSave" value="Save Settings" onClick="generateNewSettings();" style="display:none;">
-			<input type="button" id="btnAppend" value="Update Settings" onClick="updateSettings();">
+
 		</form>
 		<div data-role="footer">
-			<input type="button" id="newServerBtn" value="New Server" onClick="newServer();">
-			<input type="button" id="addApiBtn" value="Append API" onClick="appendData();">
-			<input type="button" id="overwriteApiBtn" value="Overwrite ALL" onClick="newData();">
+			<input type="button" id="dynamicApi"value="Add another API" onClick="addInput('dynamicInput');">
 			<div data-role="tabstrip">
 				<a href="views/runTest.html" data-icon="home">RunTest</a>
 				<a href="views/results.html" data-icon="globe">Results</a>
