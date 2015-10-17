@@ -29,7 +29,7 @@ var currentData;
 
 function ifNoFile()
 {
-	var json = '{"serverinfo": {"username": "mfg@qad.com","password": "","server": "plli03.qad.com","tomcatport": "40011","tomcatwebapp": "qad-central"},';
+	var json = '{"serverinfo": {"username": "mfg@qad.com","password": "","server": "plli03.qad.com:40011","tomcatwebapp": "qad-central"},';
 	json += '"apis": [{"type": "POST","name": "Login","api": "j_spring_security_check?j_username=mfg@qad.com&j_password="},';
 	json += '{"type": "GET","name": "Menus","api": "api/webshell/menu"},';
 	json += '{"type": "GET","name": "Sales-100","api": "api/qracore/browses?browseId=mfg:so803&page=1&pageSize=100"},';
@@ -42,44 +42,55 @@ function ifNoFile()
 
 function readTextFromFile(filename)
 	{
-		fileSystemTest = new FileSystemHelper();		
+		fileSystemTest = new FileSystemHelper();
 		counter = 1;
 		fileSystemHelper = new FileSystemHelper();
 		fileSystemHelper.readTextFromFile(filename, function(result){
 			initialData = JSON.parse(result);
 			var username = initialData.serverinfo.username;
-			document.getElementById("username").value = username;
-			document.getElementById("staticUserName").innerHTML = username;
-			var password = initialData.serverinfo.password;
-			document.getElementById("password").value = password;
-			document.getElementById("staticPassword").innerHTML = password;
-			var servername = initialData.serverinfo.server;
-			document.getElementById("server").value = servername;
-			document.getElementById("staticServer").innerHTML = servername;
-			var tomcatPort = initialData.serverinfo.tomcatport;
-			document.getElementById("tomcatport").value = tomcatPort;
-			document.getElementById("staticTomcatPort").innerHTML = tomcatPort;
-			var webapp = initialData.serverinfo.tomcatwebapp;
-			document.getElementById("tomcatwebapp").value = webapp;
-			document.getElementById("staticTomcatWebapp").innerHTML = webapp;
-
-			var out = "";
-			for (i = 0; i < initialData.apis.length; i++) {
-			out += "<fieldset>"
-			out += '<legend>Running API ' + (i + 1) + '</legend>';
-			out += '<div><label>Type: <input type="text" name="TypeInput[]" id="type' + (i + 1) + '" value="' + initialData.apis[i].type + '"></label></div>';
-			out += '<div><label>API Name: <input type="text" name="ApiNameInput[]" id="apiname' + (i + 1) + '" value="' + initialData.apis[i].name + '"></label></div>';
-			out += '<div><label>API: <input type="text" name="ApiInput[]" id="api' + (i + 1) + '" value="' + initialData.apis[i].api + '"></label></div>';
-			counter++;
-			out += "</fieldset>"
-			}			
-			document.getElementById("initialApiList").innerHTML = out;
-		}, 
+			document.getElementById("username").value = initialData.serverinfo.username;
+			document.getElementById("server").value = initialData.serverinfo.server;
+			document.getElementById("tomcatwebapp").value = initialData.serverinfo.tomcatwebapp;
+			document.getElementById("test-results").innerHTML = "Server Information Updated";
+			document.getElementById("update-details").innerHTML = "";
+		},
 		function(error){
 			console.log("file failed to read");
-			ifNoFile();			
+			ifNoFile();
 		});
 	};
+
+function updateServerInformation(){
+	fileSystemHelper = new FileSystemHelper();
+	fileSystemHelper.readTextFromFile("application-configuration.json", function(result){
+	updateServerData = JSON.parse(result);
+	updateServerData.serverinfo.username = document.getElementById("username").value;
+	updateServerData.serverinfo.password = document.getElementById("password").value;
+	updateServerData.serverinfo.server = document.getElementById("server").value;
+	updateServerData.serverinfo.tomcatwebapp = document.getElementById("tomcatwebapp").value;
+	writeToFile("application-configuration.json", JSON.stringify(updateServerData));
+	document.getElementById("update-details").innerHTML = "Server Information Updated";
+
+	},function(error){console.log("file failed to read");});
+
+}
+
+function addNewBrowse(){
+	var browsePrefix="api/qracore/browses?browseId="
+	fileSystemHelper = new FileSystemHelper();
+	fileSystemHelper.readTextFromFile("application-configuration.json", function(result){
+	addNewAPI = JSON.parse(result);
+	addNewAPI.apis.push({ type : "GET",name : document.getElementById("browse-name").value,api : browsePrefix + document.getElementById("browse").value});
+	writeToFile("application-configuration.json", JSON.stringify(addNewAPI));
+	document.getElementById("update-details").innerHTML = "Browse: " + document.getElementById("browse-name").value + " Added";
+	document.getElementById("browse").value = "";
+	document.getElementById("browse-name").value = "";
+
+	},function(error){console.log("file failed to read");});
+
+	browse-name
+
+}
 
 function addInput(divName){
      if (counter >= limit)  {
@@ -96,10 +107,9 @@ function addInput(divName){
 
 function writeToFile(filename, jsonSettings){
 		fileSystemHelper = new FileSystemHelper();
-		fileSystemHelper.writeLine(filename, jsonSettings, 
+		fileSystemHelper.writeLine(filename, jsonSettings,
 		function(result){
 			console.log("file created");
-			readTextFromFile(filename);
 			return true;
 		},
 		function(error){
@@ -116,7 +126,7 @@ function generateNewSettings(){
 	serverinfo += '"tomcatport" : "' + document.getElementById("tomcatport").value + '", ';
 	serverinfo += '"tomcatwebapp" : "' + document.getElementById("tomcatwebapp").value + '" }';
 	var api = ', "apis": [ ';
-	for (itterationCounter = 0; itterationCounter < counter; itterationCounter++) 
+	for (itterationCounter = 0; itterationCounter < counter; itterationCounter++)
 	{
 		var t = "type"+(itterationCounter+1);
 		var n = "apiname"+(itterationCounter+1);
@@ -133,12 +143,12 @@ function generateNewSettings(){
 		}
 	}
 	api += '] }';
-	
+
 	serverinfo = serverinfo + api;
 	writeToFile(originalfileName, serverinfo);
 	itterationCounter = 0;
 }
-	
+
 </script>
 
 <div data-role="view" data-title="Settings" data-layout="main" data-model="addSettingsViewModel">
@@ -146,58 +156,49 @@ function generateNewSettings(){
         <div id="navbarplain" data-role="navbar">
 			<img id="corplogo" src="../styles/images/QAD_Logo_Corp.png" data-align="left"
 			style="width: 50px; height: 45px; margin-top: 0.2em"/>
-			<a data-role="button" id="btnSave" onClick="generateNewSettings();" href="views/runTest.html" data-align="right">Update</a>
             <span data-role="view-title"></span>
         </div>
     </header>
 		<form method="POST" id="settingsForm">
+			<br>
 			<fieldset id="newSettings">
 				<legend>Server Information</legend>
 				<div><label for="username">Username:</label></div>
-				<input type="text" name="username" id="username"><br>
-				
+				<input type="text" name="username" id="username" size="30" maxlength="30"><br>
+
 				<div><label for="password">Password:</label></div>
-				<input type="password" name="password" id="password"><br>
-				
+				<input type="password" name="password" id="password" size="30" maxlength="30"><br>
+
 				<div><label for="server">Server:</label></div>
-				<input type="text" name="server" id="server"><br>
-				
-				<div><label for="tomcatport">Tomcat Port:</label></div>
-				<input type="text" name="tomcatport" id="tomcatport"><br>
-				
+				<input type="text" name="server" id="server" size="30" maxlength="30"><br>
+
 				<div><label for="tomcatwebapp">Tomcat WebApp:</label></div>
-				<input type="text" name="tomcatwebapp" id="tomcatwebapp"><br>
+				<input type="text" name="tomcatwebapp" id="tomcatwebapp" size="30" maxlength="30"><br>
 			</fieldset>
-			<fieldset id="appendSettings" style="display:none;">
-				<legend>Server Information</legend>
-				<div><label for="staticUserName">Username:</label><div id="staticUserName"></div>
-				
-				<label for="password">Password:</label><div id="staticPassword"></div>
-				
-				<label for="server">Server:</label><div id="staticServer"></div>
-				
-				<label for="tomcatport">Tomcat Port:</label><div id="staticTomcatPort"></div>
-				
-				<label for="tomcatwebapp">Tomcat WebApp:</label><div id="staticTomcatWebapp"></div>
+			<a data-role="button" id="btnSave" onClick="updateServerInformation();" data-align="right">Save Server Information</a>
+			<br>
+			<br>
+
+			<fieldset id="new-api">
+				<legend>Add New Browse</legend>
+							<div><label for="browse-name">Browse:</label></div>
+							<input type="text" name="browse" id="browse" placeholder="eg.mfg:gp348&page=1&pageSize=100"  size="30" maxlength="30" height="50"><br>
+
+							<div><label for="server">Name:</label></div>
+							<input type="text" name="browse-name" id="browse-name" placeholder="eg. Site-100" usrname" maxlength="10" size="10"><br>
 			</fieldset>
-			<div id="initialApiList">
-			
-			</div>
-			<div id="dynamicInput">
-
-			</div>
-			
-
 		</form>
+		<a data-role="button" id="btnSave" onClick="addNewBrowse();" data-align="right">Save API</a>
+
+		<p id="update-details" data-style="inset"></p>
 		<div data-role="footer">
-			<input type="button" id="dynamicApi"value="Add another API" onClick="addInput('dynamicInput');">
 			<div data-role="tabstrip">
 				<a href="views/runTest.html" data-icon="home">RunTest</a>
 				<a href="views/results.html" data-icon="globe">Results</a>
 				<a href="views/settingsDisplayAndEdit.html" data-icon="settings">Settings</a>
 			</div>
 		<div>
-	</div>	
+	</div>
 </div>
 
 </body>

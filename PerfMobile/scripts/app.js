@@ -213,9 +213,8 @@
 										var username = obj.serverinfo.username;
 										var password = obj.serverinfo.password;
 										var servername = obj.serverinfo.server;
-										var tomcatPort = obj.serverinfo.tomcatport;
 										var webapp = obj.serverinfo.tomcatwebapp;
-										var baseURL = "https://" + servername + ":" + tomcatPort + "/" + webapp;
+										var baseURL = "https://" + servername + "/" + webapp;
 										var pingTime = Math.floor(Math.random()*(230-160+1)+160);
 										var recordSize = 0;
 										var apiTestResults = "";
@@ -265,9 +264,8 @@
                     var username = obj.serverinfo.username;
                     var password = obj.serverinfo.password;
                     var servername = obj.serverinfo.server;
-                    var tomcatPort = obj.serverinfo.tomcatport;
                     var webapp = obj.serverinfo.tomcatwebapp;
-                    var baseURL = "https://" + servername + ":" + tomcatPort + "/" + webapp;
+                    var baseURL = "https://" + servername + "/" + webapp;
                     var requestURL;
 
                     // var outputCSV = "";
@@ -459,7 +457,6 @@
                 "username": "mfg@qad.com",
                 "password": "",
                 "server": "plli03.qad.com",
-                "tomcatport": "40011",
                 "tomcatwebapp": "qad-central"
             },
             "apis":
