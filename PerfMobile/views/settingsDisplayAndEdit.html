@@ -160,20 +160,20 @@ function generateNewSettings(){
         </div>
     </header>
 		<form method="POST" id="settingsForm">
-			<br>
+			<br/>
 			<fieldset id="newSettings">
 				<legend>Server Information</legend>
 				<div><label for="username">Username:</label></div>
-				<input type="text" name="username" id="username" size="30" maxlength="30"><br>
+				<input type="text" name="username" id="username" size="30" maxlength="30" height="100"/><br/>
 
 				<div><label for="password">Password:</label></div>
-				<input type="password" name="password" id="password" size="30" maxlength="30"><br>
+				<input type="password" name="password" id="password" size="30" maxlength="30"/><br/>
 
 				<div><label for="server">Server:</label></div>
-				<input type="text" name="server" id="server" size="30" maxlength="30"><br>
+				<input type="text" name="server" id="server" size="30" maxlength="30"/><br/>
 
 				<div><label for="tomcatwebapp">Tomcat WebApp:</label></div>
-				<input type="text" name="tomcatwebapp" id="tomcatwebapp" size="30" maxlength="30"><br>
+				<input type="text" name="tomcatwebapp" id="tomcatwebapp" size="30" maxlength="30"/><br/>
 			</fieldset>
 			<a data-role="button" id="btnSave" onClick="updateServerInformation();" data-align="right">Save Server Information</a>
 			<br>
@@ -182,12 +182,33 @@ function generateNewSettings(){
 			<fieldset id="new-api">
 				<legend>Add New Browse</legend>
 							<div><label for="browse-name">Browse:</label></div>
-							<input type="text" name="browse" id="browse" placeholder="eg.mfg:gp348&page=1&pageSize=100"  size="30" maxlength="30" height="50"><br>
+							<input type="text" name="browse" id="browse" placeholder="eg.mfg:gp348&page=1&pageSize=100"  size="30" maxlength="30" height="100"/><br/>
 
 							<div><label for="server">Name:</label></div>
-							<input type="text" name="browse-name" id="browse-name" placeholder="eg. Site-100" usrname" maxlength="10" size="10"><br>
+							<input type="text" name="browse-name" id="browse-name" placeholder="eg. Site-100" usrname" maxlength="10" size="10"/><br/>
 			</fieldset>
 		</form>
+		<style>
+
+
+		      legend{
+		        display: block;
+		        width: 80%;
+		        padding: 0;
+		        margin-bottom: 10px;
+		        font-size: 20px;
+		      }
+
+		      input{
+		      font-size: 18px;
+		      width: 98%;
+
+		      }
+
+		      div{
+		      font-size: 18px;
+		      }
+    </style>
 		<a data-role="button" id="btnSave" onClick="addNewBrowse();" data-align="right">Save API</a>
 
 		<p id="update-details" data-style="inset"></p>
