@@ -51,7 +51,6 @@ function readTextFromFile(filename)
 			document.getElementById("username").value = initialData.serverinfo.username;
 			document.getElementById("server").value = initialData.serverinfo.server;
 			document.getElementById("tomcatwebapp").value = initialData.serverinfo.tomcatwebapp;
-			document.getElementById("test-results").innerHTML = "Server Information Updated";
 			document.getElementById("update-details").innerHTML = "";
 		},
 		function(error){
@@ -109,7 +108,7 @@ function writeToFile(filename, jsonSettings){
 		fileSystemHelper = new FileSystemHelper();
 		fileSystemHelper.writeLine(filename, jsonSettings,
 		function(result){
-			console.log("file created");
+			console.log("Configuration file updated");
 			return true;
 		},
 		function(error){
@@ -196,17 +195,17 @@ function generateNewSettings(){
 		        width: 80%;
 		        padding: 0;
 		        margin-bottom: 10px;
-		        font-size: 20px;
+		        font-size: 18px;
 		      }
 
 		      input{
-		      font-size: 18px;
+		      font-size: 17px;
 		      width: 98%;
 
 		      }
 
 		      div{
-		      font-size: 18px;
+		      font-size: 17px;
 		      }
     </style>
 		<a data-role="button" id="btnSave" onClick="addNewBrowse();" data-align="right">Save API</a>
