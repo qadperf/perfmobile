@@ -126,6 +126,9 @@
 									type: "line",
 									style: "normal"
 								},
+								tooltip: {
+								        visible: true
+    							},
 								series: [
 									{
 										field: "duration",
