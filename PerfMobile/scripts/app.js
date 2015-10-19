@@ -51,6 +51,10 @@
 								type: "bar",
 								style: "normal"
 							},
+							tooltip: {
+								visible: true,
+								color: "white"
+    							},
 							series: [
 								{
 									field: "duration",
@@ -127,7 +131,8 @@
 									style: "normal"
 								},
 								tooltip: {
-								        visible: true
+								        visible: true,
+								        color: "white"
     							},
 								series: [
 									{
